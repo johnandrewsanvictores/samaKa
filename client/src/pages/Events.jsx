@@ -4,6 +4,7 @@ import EventDetailsModal from "../components/modals/EventDetailsModal.jsx";
 import api from "../../axious.js";
 import currency from "../assets/lp.png";
 import { showSuccess } from "../utils/alertHelper.js";
+import {useAuth} from "../context/AuthContext.jsx";
 
 
 const FALLBACK_EVENTS = [
@@ -50,12 +51,15 @@ const Events = () => {
   const [activeTab, setActiveTab] = useState("ongoing");
   const [events, setEvents] = useState([]);
   const [detailsEvent, setDetailsEvent] = useState(null);
+  const {user} = useAuth();
 
 
   useEffect(() => {
     const fetchEvents = async () => {
+        console.log("Hi")
       try {
-        const res = await api.get("/events/user-barangay"); 
+        const res = await api.get("/event");
+        console.log(res);
         setEvents(res.data.events || []);
       } catch (err) {
         console.error("Failed to fetch events", err);
