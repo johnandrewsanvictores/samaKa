@@ -8,6 +8,13 @@ import UserDashboard from "./pages/UserDashboard.jsx";
 import Leaderboard from "./pages/Leaderboard.jsx";
 import Store from "./pages/Store.jsx";
 import UserProfile from "./pages/UserProfile.jsx";
+import ManageEvents from "./pages/ManageEvents.jsx";
+import ManageBarangays from "./pages/ManageBarangays.jsx";
+import Analytics from "./pages/Analytics.jsx";
+import Rewards from "./pages/Rewards.jsx";
+import BarangayLeaderboard from "./pages/BarangayLeaderboard.jsx";
+import Events from "./pages/Events.jsx";
+import MunicipalityDashboard from "./pages/MunicipalityDashboard.jsx";
 
 
 function App() {
@@ -33,6 +40,13 @@ function App() {
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/store" element={<Store />} />
         <Route path="/profile" element={<UserProfile />} />
+        <Route path="/manage-events" element={<ManageEvents />} />
+        <Route path="/analytics" element={<Analytics />} />
+        <Route path="/rewards" element={<Rewards />} />
+        <Route path="/barangay-leaderboard" element={<BarangayLeaderboard />} />
+        <Route path="/events" element={<Events />} />
+        <Route path="/manage-barangays" element={<ManageBarangays />} />
+        <Route path="/municipality-dashboard" element={<MunicipalityDashboard />} />
         
         {/* 
         <Route

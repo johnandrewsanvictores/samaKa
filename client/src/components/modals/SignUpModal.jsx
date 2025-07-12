@@ -60,7 +60,7 @@ const SignUpModal = ({ isOpen, onClose, onSwitchToSignIn }) => {
       ...prev,
       [name]: value,
     }));
-    // Clear error when user starts typing
+
     if (error) setError("");
   };
 
@@ -69,7 +69,7 @@ const SignUpModal = ({ isOpen, onClose, onSwitchToSignIn }) => {
     setIsLoading(true);
     setError("");
 
-    // Client-side validation
+
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match!");
       setIsLoading(false);
@@ -83,7 +83,6 @@ const SignUpModal = ({ isOpen, onClose, onSwitchToSignIn }) => {
     }
 
     try {
-      // Database API call to your registration endpoint
 
       const res = await api.post(
         "/auth/signup",
@@ -102,7 +101,7 @@ const SignUpModal = ({ isOpen, onClose, onSwitchToSignIn }) => {
       console.log(data);
       setUser(data.user);
 
-      // Close modal and navigate to user type selection for new users
+     
       resetForm();
       onClose();
       navigate("/decide-user-type");

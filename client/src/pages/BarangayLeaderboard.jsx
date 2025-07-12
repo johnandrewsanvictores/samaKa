@@ -1,5 +1,5 @@
-import UserSidebar from "../components/navigation/UserSidebar.jsx";
 import { useState } from "react";
+import Sidebar from "../components/navigation/Sidebar.jsx";
 
 const getRowClass = (rank) => {
   if (rank === 1) return "bg-yellow-300 text-yellow-900 font-bold animate-pulse";
@@ -18,35 +18,26 @@ const getRankIcon = (rank) => {
   return null;
 };
 
-const Leaderboard = () => {
+const BarangayLeaderboard = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
 
+ 
   const data = [
-    { rank: 1, name: "John Andrew San Victores", xp: 1000 },
-    { rank: 2, name: "Nicko Balmes", xp: 980 },
-    { rank: 3, name: "Uriel Sebastian Andrei Diomano", xp: 950 },
-    { rank: 4, name: "Kenneth Alojado", xp: 930 },
-    { rank: 5, name: "John Andrew San Victorres", xp: 900 },
-    { rank: 6, name: "John Andrew San Victorres", xp: 880 },
-    { rank: 7, name: "John Andrew San Victorres", xp: 860 },
-    { rank: 8, name: "John Andrew San Victorres", xp: 840 },
-    { rank: 9, name: "John Andrew San Victorres", xp: 820 },
-    { rank: 10, name: "John Andrew San Victorres", xp: 800 },
+    { rank: 1, name: "Resident A", xp: 1200 },
+    { rank: 2, name: "Resident B", xp: 1100 },
+    { rank: 3, name: "Resident C", xp: 1050 },
+    { rank: 4, name: "Resident D", xp: 950 },
+    { rank: 5, name: "Resident E", xp: 900 },
   ];
 
-  const currentUser = {
-    name: "You (Daniel Llarena)",
-    xp: 650,
-    rank: 23,
-  };
+  // For highlight of current barangay admin account if desired (placeholder)
+  const currentUser = { name: "You (Barangay Account)", xp: 0, rank: 0 };
 
-  const isCurrentUserInTop10 = data.some(
-    (row) => row.name === currentUser.name
-  );
+  const isCurrentUserInTop10 = data.some((row) => row.name === currentUser.name);
 
   return (
     <div className="flex">
-      <UserSidebar isOpen={isSidebarOpen} onToggle={() => setSidebarOpen(!isSidebarOpen)} />
+      <Sidebar isOpen={isSidebarOpen} onToggle={() => setSidebarOpen(!isSidebarOpen)} />
 
       <main className="w-full bg-bgColor min-h-screen p-6 ml-0 lg:ml-60 transition-all duration-300">
         <div className="flex justify-between items-center mb-6">
@@ -58,23 +49,19 @@ const Leaderboard = () => {
             <i className="fas fa-bars text-2xl"></i>
           </button>
           <h1 className="text-headingText text-2xl font-bold font-nunito flex items-center space-x-2">
-            <i className="fa-solid fa-award text-primary"></i>
-            <span>Leaderboard</span>
+            <i className="fa-solid fa-medal text-primary"></i>
+            <span>Barangay Leaderboard</span>
           </h1>
-          <button className="bg-primary text-white px-4 py-2 rounded-lg font-semibold shadow hover:bg-blue-600 transition-all flex items-center space-x-2">
-            
-            <span>Join Activities</span>
-          </button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-    
+          {/* Table */}
           <div className="bg-white rounded-lg shadow-md overflow-x-auto lg:col-span-2">
             <table className="min-w-full text-left">
               <thead>
                 <tr className="bg-bgColor2 text-headingText">
                   <th className="px-4 py-2">Rank</th>
-                  <th className="px-4 py-2">Name</th>
+                  <th className="px-4 py-2">Resident</th>
                   <th className="px-4 py-2">XP</th>
                 </tr>
               </thead>
@@ -91,14 +78,13 @@ const Leaderboard = () => {
                       {row.rank}
                     </td>
                     <td className="px-4 py-2 text-subHeadingText">{row.name}</td>
-                    <td className="px-4 py-2 text-headingText font-medium">
-                      {row.xp}
-                    </td>
+                    <td className="px-4 py-2 text-headingText font-medium">{row.xp}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
 
+            {/* Highlight current user if outside top list */}
             {!isCurrentUserInTop10 && (
               <div className="mt-4 flex items-center justify-center">
                 <div className="w-full max-w-xl bg-primary/10 border border-primary rounded-lg px-6 py-4 flex items-center space-x-4 shadow-inner animate-fade-in">
@@ -109,42 +95,28 @@ const Leaderboard = () => {
                   <span className="text-headingText font-semibold flex-1">
                     {currentUser.name}
                   </span>
-                  <span className="text-headingText font-medium">
-                    {currentUser.xp} XP
-                  </span>
-                  <span className="ml-2 text-xs text-primary font-semibold bg-primary/20 px-2 py-1 rounded">
-                    Your Rank
-                  </span>
+                  <span className="text-headingText font-medium">{currentUser.xp} XP</span>
+                  <span className="ml-2 text-xs text-primary font-semibold bg-primary/20 px-2 py-1 rounded">Your Rank</span>
                 </div>
               </div>
             )}
           </div>
 
-   
+          {/* Reminder Side Panel */}
           <div className="bg-white rounded-lg p-6 shadow-md flex flex-col space-y-3">
             <h2 className="font-semibold text-headingText flex items-center space-x-2">
               <i className="fa-solid fa-bell text-primary"></i>
-              <span>Reminder!!!</span>
+              <span>Reminder</span>
             </h2>
             <p className="text-subHeadingText text-sm">
-              The player who is in the top 5 will receive a reward at the end of the month.
+              Top-performing residents will receive special recognition at the end of the month.
             </p>
             <ul className="list-disc list-inside text-subHeadingText text-sm space-y-1">
-              <li>
-                <span className="font-bold text-yellow-700">Top 1</span> will receive 5000 points
-              </li>
-              <li>
-                <span className="font-bold text-gray-700">Top 2</span> will receive 2500 points
-              </li>
-              <li>
-                <span className="font-bold text-amber-700">Top 3</span> will receive 2000 points
-              </li>
-              <li>
-                <span className="font-bold text-primary">Top 4</span> will receive 1500 points
-              </li>
-              <li>
-                <span className="font-bold text-primary">Top 5</span> will receive 1000 points
-              </li>
+              <li><span className="font-bold text-yellow-700">Top 1</span> – 5000 points reward</li>
+              <li><span className="font-bold text-gray-700">Top 2</span> – 2500 points reward</li>
+              <li><span className="font-bold text-amber-700">Top 3</span> – 2000 points reward</li>
+              <li><span className="font-bold text-primary">Top 4</span> – 1500 points reward</li>
+              <li><span className="font-bold text-primary">Top 5</span> – 1000 points reward</li>
             </ul>
           </div>
         </div>
@@ -153,4 +125,4 @@ const Leaderboard = () => {
   );
 };
 
-export default Leaderboard; 
+export default BarangayLeaderboard; 

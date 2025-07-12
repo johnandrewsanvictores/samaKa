@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Sidebar from "../components/navigation/Sidebar.jsx";
 
 const BarangayDashboard = () => {
@@ -9,18 +10,27 @@ const BarangayDashboard = () => {
   ];
 
   const upcomingActivities = [
-    { title: "Tree Planting", date: "July 22, 2026" },
+    { title: "Tree Planting", date: "July 12, 2025" },
     { title: "Coastal Cleanup", date: "August 2, 2026" },
     { title: "Recycling Drive", date: "August 15, 2026" },
   ];
 
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+
   return (
     <div className="flex">
-      <Sidebar />
+      <Sidebar isOpen={isSidebarOpen} onToggle={() => setSidebarOpen(!isSidebarOpen)} />
 
-      <main className="ml-60 w-full bg-bgColor min-h-screen p-6">
-        {/* Heading */}
+      <main className="w-full bg-bgColor min-h-screen p-6 ml-0 lg:ml-60 transition-all duration-300">
+   
         <div className="flex justify-between items-center mb-6">
+      
+          <button
+            className="lg:hidden text-headingText mr-2"
+            onClick={() => setSidebarOpen(!isSidebarOpen)}
+          >
+            <i className="fas fa-bars text-2xl"></i>
+          </button>
           <h1 className="text-headingText text-2xl font-bold font-nunito flex items-center space-x-2">
             <i className="fa-solid fa-gauge-high text-primary"></i>
             <span>Barangay Dashboard</span>
@@ -32,9 +42,9 @@ const BarangayDashboard = () => {
           </button>
         </div>
 
-        {/* First Row */}
+   
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-          {/* Create Events card */}
+      
           <div className="bg-white rounded-lg p-6 shadow-md flex flex-col justify-between">
             <h2 className="font-semibold text-headingText mb-2 flex items-center space-x-2">
               <i className="fa-solid fa-calendar-plus text-primary"></i>
@@ -49,7 +59,7 @@ const BarangayDashboard = () => {
             </button>
           </div>
 
-          {/* Quick Overview */}
+    
           <div className="bg-white rounded-lg p-6 shadow-md">
             <h2 className="font-semibold text-headingText mb-4 flex items-center space-x-2">
               <i className="fa-solid fa-chart-pie text-primary"></i>
@@ -73,9 +83,9 @@ const BarangayDashboard = () => {
           </div>
         </div>
 
-        {/* Second Row */}
+   
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Upcoming Activities */}
+   
           <div className="bg-white rounded-lg p-6 shadow-md">
             <h2 className="font-semibold text-headingText mb-4 flex items-center space-x-2">
               <i className="fa-solid fa-clock-rotate-left text-primary"></i>
@@ -97,7 +107,7 @@ const BarangayDashboard = () => {
             </div>
           </div>
 
-          {/* Analytics */}
+     
           <div className="bg-white rounded-lg p-6 shadow-md">
             <div className="flex items-center justify-between mb-4">
               <h2 className="font-semibold text-headingText flex items-center space-x-2">

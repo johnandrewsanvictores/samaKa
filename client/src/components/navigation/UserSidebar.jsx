@@ -6,7 +6,7 @@ import { useAuth } from "../../context/AuthContext.jsx";
 import api from "../../../axious.js";
 import { showConfirmation, showSuccess } from "../../utils/alertHelper.js";
 
-const UserSidebar = () => {
+const UserSidebar = ({ isOpen = true, onToggle }) => {
   const { setUser } = useAuth();
   const navigate = useNavigate();
   const [isProcessingLogout, setIsProcessingLogout] = useState(false);
@@ -34,7 +34,17 @@ const UserSidebar = () => {
   };
 
   return (
-    <aside className="w-60 bg-bgColor2 h-screen fixed top-0 left-0 flex flex-col justify-between shadow-md z-40">
+    <aside
+      className={`w-60 bg-bgColor2 h-screen fixed top-0 left-0 flex flex-col justify-between shadow-md z-40 transform transition-transform duration-300 ${
+        isOpen ? "translate-x-0" : "-translate-x-full"
+      } lg:translate-x-0`}
+    >
+      <button
+        className="lg:hidden absolute top-4 right-4 text-headingText"
+        onClick={() => onToggle ? onToggle() : null}
+      >
+        <i className="fa-solid fa-xmark text-2xl"></i>
+      </button>
       <div>
         <div className="flex items-center space-x-3 p-4">
           <img src={logo} alt="logo" className="h-10 w-10" />
@@ -46,6 +56,10 @@ const UserSidebar = () => {
           <NavLink to="/dashboard" className={getSidebarLinkClass} end>
             <i className="fa-solid fa-house text-xl"></i>
             <span className="text-lg">Dashboard</span>
+          </NavLink>
+          <NavLink to="/events" className={getSidebarLinkClass}>
+            <i className="fa-solid fa-calendar-days text-xl"></i>
+            <span className="text-lg">Events</span>
           </NavLink>
           <NavLink to="/leaderboard" className={getSidebarLinkClass}>
             <i className="fa-solid fa-ranking-star text-xl"></i>
