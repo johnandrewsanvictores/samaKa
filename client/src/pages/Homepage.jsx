@@ -1,14 +1,16 @@
 import PublicLayout from "../layout/PublicLayout.jsx";
+import HeroSection from "../components/section/HeroSection.jsx";
+import TaglineSection from "../components/section/TaglineSection.jsx";
+import HowItWorksSection from "../components/section/HowItWorksSection.jsx";
+import KeyFeatureAndBenefitsSection from "../components/section/KeyFeature&BenefitsSection.jsx";
 
 const Homepage = () => {
-
-
     return (
         <PublicLayout>
-            <div className="h-96 flex justify-center items-center">
-
-                <h1 className="text-h1 text-red font-bold ">Pawgrammers 411</h1>
-            </div>
+            <HeroSection />
+            <TaglineSection />
+            <HowItWorksSection />
+            <KeyFeatureAndBenefitsSection />
         </PublicLayout>
     )
 }
