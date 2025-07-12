@@ -6,11 +6,12 @@ import {hashPassword} from "../utils/hash.js";
 import {body, validationResult} from "express-validator";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+
 dotenv.config();
 
 function generateUsername(givenName) {
-    const name = givenName.toLowerCase().replace(/\s+/g, ''); // lowercase + no spaces
-    const randomNum = Math.floor(1000 + Math.random() * 9000); // 4-digit random
+    const name = givenName.toLowerCase().replace(/\s+/g, '');
+    const randomNum = Math.floor(1000 + Math.random() * 9000);
     return `${name}${randomNum}`;
 }
 
@@ -22,7 +23,6 @@ passport.use(new GoogleStrategy({
             proxy: true
         },
         async (accessToken, refreshToken, profile, done) => {
-
             try{
                 let user = await User.findOne({googleId: profile.id});
                 console.log(user)
@@ -34,7 +34,7 @@ passport.use(new GoogleStrategy({
                         firstName: profile._json.given_name,
                         lastName: profile._json.family_name,
                         password: null,
-                        email: profile._json.email, // Make sure 'email' scope is enabled!
+                        email: profile._json.email,
                         googleId: profile.id,
                         username: generateUsername(profile._json.given_name)
                     });
@@ -68,8 +68,8 @@ export const google_authenticate = passport.authenticate('google', {
 });
 
 //user
-const createToken = (userId) => {
-    return jwt.sign({ userId },  process.env.JWT_SECRET, { expiresIn: '7d'});
+const createToken = (userId, role, barangayId=null) => {
+    return jwt.sign({ _id: userId, role: role, barangayId },  process.env.JWT_SECRET, { expiresIn: '7d'});
 }
 
 export const google_callback = (req, res, next) => {
@@ -81,7 +81,7 @@ export const google_callback = (req, res, next) => {
 
             console.log(req.user)
 
-            const token = createToken(req.user._id);
+            const token = createToken(req.user._id, req.user.role, req.user.barangayId);
 
             res.cookie('token', token, {
                 httpOnly: true,
@@ -92,7 +92,7 @@ export const google_callback = (req, res, next) => {
             });
 
 
-            res.redirect(`${process.env.FRONTEND_BASE_URL}/google-success`);
+            res.redirect(`${process.env.FRONTEND_BASE_URL}/`);
         });
     })(req, res, next);
 }
@@ -154,21 +154,23 @@ export const createUser = async (req, res) => {
         }
 
         const user = await User.create({firstName, lastName,email, password: hashedPassword, username});
-        const token = createToken(user._id);
+        const token = createToken(user._id, user.role, user.barangayId);
         res.cookie('token', token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production', // only on HTTPS in production
+            secure: process.env.NODE_ENV === 'production',
             sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
             maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
         });
 
         res.status(201).json({
             user: {
-            userId : user._id,
+            _id : user._id,
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
-            username: user.username
+            username: user.username,
+                role: user.role,
+                barangayId: user.barangayId
             },
             success: "true",
             message: "User created successfully"
@@ -192,7 +194,7 @@ export const signIn = async (req, res) => {
         if (!isMatch) return res.status(400).json({ error: 'Invalid credentials' });
 
         // 3. Create token
-        const token = createToken(user._id);
+        const token = createToken(user._id, user.role, user.barangayId);
 
         res.cookie('token', token, {
             httpOnly: true,
@@ -204,13 +206,13 @@ export const signIn = async (req, res) => {
         // 4. Send token and user info (without password)
         res.status(200).json({
             user: {
-                userId : user._id,
+                _id : user._id,
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
                 username: user.username,
-                userType: user.userType,
-                isFirstVisit: user.isFirstVisit
+                role: user.role,
+                barangayId: user.barangayId
             }
         });
 
@@ -237,6 +239,20 @@ export const updateUser =  async (req, res) => {
 };
 
 
+export const getUserProfile = async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id).select('-password'); // exclude password
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.json({ user: { ...user.toObject(), _id: user._id } });
+    } catch (err) {
+        console.error('Profile error:', err);
+        res.status(500).json({ error: 'Server error' });
+    }
+}
 
 
 
