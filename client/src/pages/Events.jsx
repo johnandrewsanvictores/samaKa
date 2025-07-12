@@ -72,7 +72,9 @@ const Events = () => {
 
   const handleJoin = async (evt) => {
     try {
-      await api.post(`/events/${evt.id}/join`);
+      await api.post(`/event/join`, {
+        eventId: evt._id,
+      });
       showSuccess("Successfully joined the event!");
     
     } catch (err) {

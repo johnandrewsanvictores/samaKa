@@ -107,6 +107,8 @@ export const joinEvent = async (req, res) => {
         const {eventId} = req.body;
         const currentUser = req.user;
 
+        const userInfo = await User.findById(currentUser._id);
+
         const isJoin = await Join.findOne({$and: [
                 {eventId}, {userId: currentUser._id}
             ]})
@@ -115,7 +117,7 @@ export const joinEvent = async (req, res) => {
             return res.status(409).json({ error: "User already joined" });
         }
 
-        const joinedInfo = await Join.create({userId:currentUser._id, eventId, joinedAt: Date.now()})
+        const joinedInfo = await Join.create({userId:currentUser._id, fullName: userInfo.firstName + " " + userInfo.lastName ,  eventId, joinedAt: Date.now()})
 
         res.status(201).json({
             joinedInfo,
