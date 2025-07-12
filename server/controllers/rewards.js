@@ -89,3 +89,13 @@ export const getRewards = async (req, res) => {
         res.status(500).json({ error: err });
     }
 }
+
+export const getSpecificBarangayRewards = async (req, res) => {
+    try {
+        const { barangayId } = req.params;
+        const specificBarangayRewards = await Reward.find({barangayId: barangayId}); // exclude password
+        res.json({specificBarangayRewards});
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+}
