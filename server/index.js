@@ -5,6 +5,8 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import authRoutes from './routes/auth.js';
 import barangayRoutes from './routes/barangay.js';
+import rewardRoutes from './routes/rewards.js';
+
 
 //import emailRoutes from './routes/email.js';
 import cookieParser from "cookie-parser";
@@ -66,6 +68,7 @@ app.use(passport.session());
 
 app.use("/auth", authRoutes);
 app.use("/barangay", barangayRoutes);
+app.use("/reward", rewardRoutes);
 //app.use("/mail", emailRoutes)
 
 app.listen(3000, () => {
