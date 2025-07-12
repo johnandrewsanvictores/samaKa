@@ -89,7 +89,6 @@ const Nav = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-
   if (loading) return <p>Loading...</p>;
 
   return (
@@ -104,7 +103,8 @@ const Nav = () => {
                 className="h-10 w-10 lg:h-12 lg:w-12"
               />
               <span className="text-headingText font-nunito font-bold text-xl lg:text-3xl">
-                Sama<span className="text-primary">Ka</span>
+                <span className="text-primary">Bayani</span>
+                <span className="text-subHeadingText">mo</span>
               </span>
             </Link>
           </div>
@@ -117,12 +117,13 @@ const Nav = () => {
               <NavLink to="/about" className={getNavLinkClass}>
                 About
               </NavLink>
+              <NavLink to="/reward" className={getNavLinkClass}>
+                Reward
+              </NavLink>
             </div>
           </div>
 
           <div className="hidden lg:flex lg:justify-end lg:items-center lg:space-x-4">
-            
-
             {user ? (
               <div className="relative">
                 <div

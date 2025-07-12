@@ -28,30 +28,26 @@ const HowItWorksSection = () => {
   const steps = [
     {
       stepNumber: "01",
-      title: "",
-      description:
-        "",
+      title: "Tree Planting",
+      description: "Plant a tree and earn rewards",
       videoPlaceholder: "",
     },
     {
       stepNumber: "02",
-      title: "",
-      description:
-        "",
+      title: "Watering",
+      description: "Water a tree and earn rewards",
       videoPlaceholder: "",
     },
     {
       stepNumber: "03",
-      title: "",
-      description:
-        "",
+      title: "Fertilizing",
+      description: "Fertilize a tree and earn rewards",
       videoPlaceholder: "",
     },
     {
       stepNumber: "04",
-      title: "",
-      description:
-        "",
+      title: "Harvesting",
+      description: "Harvest a tree and earn rewards",
       videoPlaceholder: "",
     },
   ];
@@ -65,10 +61,10 @@ const HowItWorksSection = () => {
       <div className="max-w-7xl mx-auto">
         <div className="step-item text-center mb-16 sm:mb-20 md:mb-24 opacity-0 translate-y-8 transition-all duration-700 ease-out">
           <h2 className="text-h3 sm:text-h2 font-bold text-primary mb-6">
-            How it works
+            Highlights
           </h2>
           <p className="text-p sm:text-h6 md:text-h5 text-subHeadingText leading-relaxed max-w-3xl mx-auto">
-            
+            This is some of the highlights of the platform.
           </p>
         </div>
 

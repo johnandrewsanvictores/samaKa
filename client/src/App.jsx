@@ -9,7 +9,6 @@ import Leaderboard from "./pages/Leaderboard.jsx";
 import Store from "./pages/Store.jsx";
 import UserProfile from "./pages/UserProfile.jsx";
 
-
 function App() {
   const PrivateRoute = ({ children }) => {
     const { user, loading } = useAuth();
@@ -25,15 +24,13 @@ function App() {
         <Route path="/" element={<Homepage />} />
         <Route path="/google-success" element={<GoogleSuccess />} />
 
-
         <Route path="/barangay-dashboard" element={<BarangayDashboard />} />
 
-       
         <Route path="/dashboard" element={<UserDashboard />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/store" element={<Store />} />
         <Route path="/profile" element={<UserProfile />} />
-        
+
         {/* 
         <Route
           path="/dashboard"
