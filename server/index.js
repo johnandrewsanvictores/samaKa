@@ -28,7 +28,7 @@ app.use((req, res, next) => {
 app.use(express.urlencoded({ extended: true }));
 app.use('/rewards', express.static(path.join(process.cwd(), 'uploads', 'rewards')));
 app.use('/eventCover', express.static(path.join(process.cwd(), 'uploads', 'eventCover')));
-app.use('/eventCover', express.static(path.join(process.cwd(), 'uploads', 'receipt')));
+app.use('/receipt', express.static(path.join(process.cwd(), 'uploads', 'receipt')));
 
 app.use(express.json());
 
