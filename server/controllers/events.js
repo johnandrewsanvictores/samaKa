@@ -9,7 +9,7 @@ export const addEvents = async (req, res) => {
     try {
         const currentUser = req.user;
         console.log(req.file);
-        const {eventImg, title, description, startDate, endDate, lp, type, dayInterval} = req.body;
+        const {eventImg, title, description, startDate, endDate, lp, type, dayInterval, category} = req.body;
         const coverFile = req.file.filename || null;
 
         if(currentUser.role !== "barangay"){
@@ -30,7 +30,7 @@ export const addEvents = async (req, res) => {
             return res.status(409).json({ error: "Event already exists" });
         }
 
-        const event = await Events.create({barangayId: currentUser.barangayId, eventImg: coverFile, title, description, lp, type, dayInterval, startDate, endDate});
+        const event = await Events.create({barangayId: currentUser.barangayId, eventImg: coverFile, title, description, category, lp, type, dayInterval, startDate, endDate});
 
         res.status(201).json({
             event,

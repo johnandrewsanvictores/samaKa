@@ -9,7 +9,7 @@ const brgySchema = new mongoose.Schema({
                 imgPath: { type: String, required: false, default: "" },
                 title: { type: String, required: true, default: "" },
                 description:  { type: String, required: false, default: "" },
-                lp: { type: BigInt,  required: true, default: 0 },
+                lp: { type: Int32,  required: true, default: 0 },
             }
         ], required: false, default: []},
 }, { timestamps: true });

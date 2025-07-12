@@ -1,4 +1,5 @@
 import Barangay from "../models/barangayModel.js";
+import Events from "../models/eventModel.js";
 
 export const createBarangay = async (req, res) => {
     try {
@@ -30,5 +31,25 @@ export const createBarangay = async (req, res) => {
         });
     } catch(error) {
         res.status(500).json({ message: 'Server error', error: error.message });
+    }
+}
+
+export const getBarangays = async (req, res) => {
+    try {
+        const barangays = await Barangay.find({}); // exclude password
+
+        res.json({barangays});
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+}
+
+export const getSpecificBarangay = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const barangay = await Barangay.find({_id: id}); // exclude password
+        res.json(barangay[0]);
+    } catch (err) {
+        res.status(500).json({ error: err });
     }
 }
