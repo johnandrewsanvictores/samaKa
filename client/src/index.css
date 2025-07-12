@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-bgColor text-subHeadingText font-nunito;
+    background-color: #f3f7fb;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
