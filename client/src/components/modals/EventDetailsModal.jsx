@@ -17,7 +17,14 @@ const EventDetailsModal = ({
 }) => {
   if (!isOpen) return null;
 
-  const { title, date, status, image, points, description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore." } = event;
+  const {
+    title,
+    date,
+    status,
+    image,
+    points,
+    description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.",
+  } = event;
 
   const tagStyle = TAG_STYLES[status] || "bg-gray-200 text-gray-700";
 
@@ -33,19 +40,30 @@ const EventDetailsModal = ({
 
         {/* Image */}
         {image && (
-          <img src={image} alt={title} className="w-full h-48 object-cover rounded-t-2xl" />
+          <img
+            src={image}
+            alt={title}
+            className="w-full h-48 object-cover rounded-t-2xl"
+          />
         )}
 
         <div className="p-6 space-y-4">
           {/* Title and Tag */}
           <div>
-            <h2 className="text-lg font-semibold text-headingText mb-1">{title}</h2>
-            <span className={`inline-block px-2 py-0.5 text-xs rounded-md font-semibold ${tagStyle}`}>
-              {status === "past" ? "Past events" : status === "ongoing" ? "Ongoing" : "Upcoming Events"}
+            <h2 className="text-lg font-semibold text-headingText mb-1">
+              {title}
+            </h2>
+            <span
+              className={`inline-block px-2 py-0.5 text-xs rounded-md font-semibold ${tagStyle}`}
+            >
+              {status === "past"
+                ? "Past events"
+                : status === "ongoing"
+                ? "Ongoing"
+                : "Upcoming Events"}
             </span>
           </div>
 
-          
           <p className="text-xs text-subHeadingText mb-1 flex items-center gap-1">
             <i className="fa-regular fa-calendar"></i>
             <span>{date}</span>
@@ -57,14 +75,17 @@ const EventDetailsModal = ({
             </p>
           )}
 
-       
-          <p className="text-xs text-subHeadingText leading-relaxed">{description}</p>
+          <p className="text-xs text-subHeadingText leading-relaxed">
+            {description}
+          </p>
 
-        
           {isUserView ? (
             <div className="flex items-center justify-between mt-4">
               <p className="text-xs text-subHeadingText">
-                Participants: <span className="font-semibold text-headingText">{attendees.length}</span>
+                Participants:{" "}
+                <span className="font-semibold text-headingText">
+                  {attendees.length}
+                </span>
               </p>
               {status !== "past" && (
                 <button
@@ -78,14 +99,21 @@ const EventDetailsModal = ({
           ) : (
             <>
               <p className="text-xs text-subHeadingText mb-3">
-                Participants: <span className="font-semibold text-headingText">{attendees.length}</span>
+                Participants:{" "}
+                <span className="font-semibold text-headingText">
+                  {attendees.length}
+                </span>
               </p>
               <div>
                 <table className="w-full text-xs text-left">
                   <thead>
                     <tr>
-                      <th className="py-2 border-b font-semibold">Name of Attendees</th>
-                      <th className="py-2 border-b font-semibold text-center">Is Present?</th>
+                      <th className="py-2 border-b font-semibold">
+                        Name of Attendees
+                      </th>
+                      <th className="py-2 border-b font-semibold text-center">
+                        Is Present?
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -127,4 +155,4 @@ const EventDetailsModal = ({
   );
 };
 
-export default EventDetailsModal; 
+export default EventDetailsModal;

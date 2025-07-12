@@ -15,7 +15,8 @@ import Rewards from "./pages/Rewards.jsx";
 import BarangayLeaderboard from "./pages/BarangayLeaderboard.jsx";
 import Events from "./pages/Events.jsx";
 import MunicipalityDashboard from "./pages/MunicipalityDashboard.jsx";
-
+import About from "./pages/About.jsx";
+import RewardNav from "./pages/Reward-nav.jsx";
 
 function App() {
   const PrivateRoute = ({ children }) => {
@@ -32,10 +33,8 @@ function App() {
         <Route path="/" element={<Homepage />} />
         <Route path="/google-success" element={<GoogleSuccess />} />
 
-
         <Route path="/barangay-dashboard" element={<BarangayDashboard />} />
 
-       
         <Route path="/dashboard" element={<UserDashboard />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/store" element={<Store />} />
@@ -46,8 +45,13 @@ function App() {
         <Route path="/barangay-leaderboard" element={<BarangayLeaderboard />} />
         <Route path="/events" element={<Events />} />
         <Route path="/manage-barangays" element={<ManageBarangays />} />
-        <Route path="/municipality-dashboard" element={<MunicipalityDashboard />} />
-        
+        <Route
+          path="/municipality-dashboard"
+          element={<MunicipalityDashboard />}
+        />
+        <Route path="/about" element={<About />} />
+        <Route path="/reward" element={<RewardNav />} />
+
         {/* 
         <Route
           path="/dashboard"

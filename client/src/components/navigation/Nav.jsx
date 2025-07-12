@@ -108,7 +108,6 @@ const Nav = () => {
               </span>
             </Link>
           </div>
-
           <div className="hidden lg:flex lg:justify-center lg:flex-1">
             <div className="flex space-x-6 xl:space-x-10 items-center">
               <NavLink to="/" className={getNavLinkClass}>
@@ -198,7 +197,6 @@ const Nav = () => {
             )}
           </div>
 
-    
           <div className="lg:hidden flex items-center">
             {user ? (
               <div className="flex items-center space-x-4">
@@ -233,7 +231,6 @@ const Nav = () => {
             )}
           </div>
         </div>
-
 
         {isMobileMenuOpen && (
           <div className="lg:hidden bg-white border-t border-gray-200 shadow-lg absolute w-full left-0 z-40">
@@ -293,7 +290,6 @@ const Nav = () => {
           </div>
         )}
 
- 
         {isDropdownOpen && isMobile && (
           <div
             className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-50"
@@ -368,7 +364,6 @@ const Nav = () => {
         onSwitchToSignUp={handleSwitchToSignUp}
       />
 
-  
       <SignUpModal
         isOpen={isSignUpModalOpen}
         onClose={handleCloseModals}
