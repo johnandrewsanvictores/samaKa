@@ -24,55 +24,45 @@ const KeyFeatureAndBenefitsSection = () => {
   const features = [
     {
       icon: Upload,
-      title: "",
-      summary:
-        "",
-      description:
-        "",
+      title: "Money",
+      summary: "",
+      description: "",
     },
     {
       icon: Bot,
       title: "",
-      summary:
-        "",
-      description:
-        "",
+      summary: "",
+      description: "",
     },
     {
       icon: Settings,
       title: "",
-      summary:
-        "",
-      description:
-        "",
+      summary: "",
+      description: "",
     },
     {
       icon: Mic,
       title: "",
       summary: "",
-      description:
-        "",
+      description: "",
     },
     {
       icon: BarChart2,
       title: "",
       summary: "",
-      description:
-        "",
+      description: "",
     },
     {
       icon: Star,
       title: "",
       summary: "",
-      description:
-        "",
+      description: "",
     },
     {
       icon: CreditCard,
       title: "",
       summary: "",
-      description:
-        "",
+      description: "",
     },
   ];
 
@@ -80,15 +70,13 @@ const KeyFeatureAndBenefitsSection = () => {
     <section className="py-16 px-4 bg-bgColor2 transition-colors duration-300">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-h2 font-bold text-primary mb-6">
-            Key Features and Benefits
-          </h2>
+          <h2 className="text-h2 font-bold text-primary mb-6">Rewards</h2>
           <p className="text-p text-subHeadingText leading-relaxed max-w-3xl mx-auto">
-           
+            These are the available rewards for you to able to claim.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
           {features.map((feature, index) => {
             const IconComponent = feature.icon;
             const isExpanded = expandedItems[index];

@@ -11,15 +11,13 @@ const Footer = () => {
               <img src={logo} alt="logo" className="w-12 h-12" />
               <h2 className="text-2xl font-bold text-headingText dark:text-white">
                 <span className="text-headingText dark:text-white">
-                  SamaKa
+                  Bayanimo
                 </span>{" "}
                 <span className="text-primary"></span>
               </h2>
             </div>
             <div>
-              <p className="text-subHeadingText dark:text-gray-300 mb-6">
-                
-              </p>
+              <p className="text-subHeadingText dark:text-gray-300 mb-6"></p>
             </div>
             <div className="flex items-center gap-10">
               <a
@@ -28,12 +26,24 @@ const Footer = () => {
               >
                 Home
               </a>
-            
+
               <a
                 href="#"
                 className="text-subHeadingText dark:text-gray-300 border-r border-gray-300 dark:border-gray-600 pr-4 hover:text-primary transition-colors"
               >
                 About
+              </a>
+              <a
+                href="#"
+                className="text-subHeadingText dark:text-gray-300 border-r border-gray-300 dark:border-gray-600 pr-4 hover:text-primary transition-colors"
+              >
+                Rewards
+              </a>
+              <a
+                href="#"
+                className="text-subHeadingText dark:text-gray-300 border-r border-gray-300 dark:border-gray-600 pr-4 hover:text-primary transition-colors"
+              >
+                Join Activity
               </a>
             </div>
             <div className="flex items-center gap-10 mt-4">
@@ -151,8 +161,7 @@ const Footer = () => {
         <div className="border-t border-gray-200 dark:border-gray-700 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-subHeadingText dark:text-gray-300 text-sm">
-              © 2025  All
-              rights reserved.
+              © 2025 All rights reserved.
             </p>
             <div className="flex space-x-6 text-sm">
               <a
