@@ -50,6 +50,7 @@ const ManageEvents = () => {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [detailsEvent, setDetailsEvent] = useState(null);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [attendees , setAttendees] = useState([]);
 
   const attendeesMock = [
     { name: "John Andrew San Victorres", present: true },
@@ -58,6 +59,17 @@ const ManageEvents = () => {
   ];
 
   const [events, setEvents] = useState([]);
+
+  const fetchAttendees = async (evt) => {
+    try {
+      console.log(evt._id);
+      const res = await api.get("/event/participants/"+evt._id);
+        console.log(res.data.participants);
+      setAttendees(res.data.participants);
+    }catch (e) {
+      console.error(e);
+    }
+  }
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -70,28 +82,8 @@ const ManageEvents = () => {
         console.error("Failed to fetch events", err);
       }
     };
-
     fetchEvents();
   }, []);
-
-  const handleOnSave = async (data) => {
-    try {
-      console.log(data);
-      const res = await api.post(
-          "/event/create",
-          data,
-          { withCredentials: true }
-      );
-
-      const data = res.data;
-
-      setEvents(prev => ([...prev, data]))
-      console.log(data)
-      console.log(events);
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
   return (
     <div className="flex">
@@ -165,7 +157,12 @@ const ManageEvents = () => {
                   <p className="text-xs text-subHeadingText line-clamp-3 mb-4">
                     {evt.description}
                   </p>
-                  <button className="bg-primary/20 text-primary text-xs px-3 py-1 rounded-md font-semibold" onClick={() => setDetailsEvent(evt)}>
+                  <button className="bg-primary/20 text-primary text-xs px-3 py-1 rounded-md font-semibold" onClick={
+                    async () => {
+                      await setDetailsEvent(evt);
+                      await fetchAttendees(evt)
+                    }
+                  }>
                     View Details
                   </button>
                 </div>
@@ -174,10 +171,10 @@ const ManageEvents = () => {
         </div>
       </main>
       {isCreateOpen && (
-        <CreateActivityModal isOpen={isCreateOpen} onClose={() => setIsCreateOpen(false)} onSave={async (data) => await handleOnSave(data)} />
+        <CreateActivityModal isOpen={isCreateOpen} onClose={() => setIsCreateOpen(false)} setEvents={setEvents} events={events} />
       )}
       {detailsEvent && (
-        <EventDetailsModal isOpen={!!detailsEvent} onClose={() => setDetailsEvent(null)} event={detailsEvent} attendees={attendeesMock} />
+        <EventDetailsModal isOpen={!!detailsEvent} onClose={() => setDetailsEvent(null)} event={detailsEvent} attendees={attendees} />
       )}
     </div>
   );
