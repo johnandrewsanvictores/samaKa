@@ -4,6 +4,7 @@ import { promises as fsp } from 'fs';
 import {fileExists, getCoverImgUploadFolder} from "../utils/helper.js";
 import path from "path";
 import Events from "../models/eventModel.js";
+import Join from "../models/joinModel.js";
 
 export const addEvents = async (req, res) => {
     try {
@@ -97,5 +98,86 @@ export const getSpecificEvents = async (req, res) => {
         res.json(event[0]);
     } catch (err) {
         res.status(500).json({ error: err });
+    }
+}
+
+export const joinEvent = async (req, res) => {
+    try{
+        const {eventId} = req.body;
+        const currentUser = req.user;
+
+        const isJoin = await Join.findOne({$and: [
+                {eventId}, {userId: currentUser._id}
+            ]})
+
+        if(isJoin){
+            return res.status(409).json({ error: "User already joined" });
+        }
+
+        const joinedInfo = await Join.create({userId:currentUser._id, eventId, joinedAt: Date.now()})
+
+        res.status(201).json({
+            joinedInfo,
+            success: "true",
+            message: "User joined successfully"
+        });
+    } catch(error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+}
+
+export const acceptAttendance = async (req, res) => {
+    try {
+        const { eventId, userId } = req.body;
+        const updateReward = await Join.findOneAndUpdate(
+            {$and: [
+                {eventId}, {userId}
+            ]},
+            { $set: {isPresent : true} },
+            { new: true }
+        );
+
+        res.status(200).json({ success: true, reward: updateReward, message: "Updated joined status of user successfully" });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+}
+
+export const rejectAttendance = async (req, res) => {
+    try {
+        const { eventId, userId } = req.body;
+        const updateReward = await Join.findOneAndUpdate(
+            {$and: [
+                    {eventId}, {userId}
+                ]},
+            { $set: {isPresent : false} },
+            { new: true }
+        );
+
+        res.status(200).json({ success: true, reward: updateReward, message: "Updated joined status of user successfully" });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+}
+
+export const getParticipantCount = async (req, res) => {
+        console.log(req.body);
+    try {
+        const eventId = req.params.id;
+        const pcount = await Join.countDocuments({eventId});
+        console.log("Hello " + pcount)
+        res.status(200).json({pcount});
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+}
+
+export const getParticipants = async (req, res) => {
+    try {
+        const eventId = req.params.eventId;
+        const participants = await Join.find({eventId});
+        res.status(200).json({participants});
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
     }
 }

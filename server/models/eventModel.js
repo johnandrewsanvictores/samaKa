@@ -15,7 +15,7 @@ const eventSchema = new mongoose.Schema({
     status: { type: String, required: true, default: "upcoming" },
     joined: {type: [{
             userId: { type: ObjectId, required: true },
-            isPresent: { type: Boolean, default: false },
+            isPresent: { type: Boolean, default: null },
             joinedAt: { type: Date, required: true },
         }], default: []}
 
