@@ -32,25 +32,3 @@ export const createBarangay = async (req, res) => {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 }
-
-export const addRewards = async (req, res) => {
-    try {
-        const currentUser = req.user;
-        console.log(currentUser)
-        const {imgPath, title, description, lp} = req.body;
-        if(currentUser.role !== "barangay") return res.status(401).json({ error: 'Unauthorized' });
-
-        const reward = await Barangay.findOneAndUpdate({_id: req.user.barangayId}, {$push: {generalRewards: {
-            imgPath, title, description, lp
-                }}});
-
-        res.status(201).json({
-            reward,
-            success: "true",
-            message: "Reward created successfully"
-        });
-
-    }catch(error) {
-        res.status(500).json({ message: 'Server error', error: error.message });
-    }
-}

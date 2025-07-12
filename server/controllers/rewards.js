@@ -41,18 +41,40 @@ export const addRewards = async (req, res) => {
     }
 }
 
-export const editReward = async (req, res) => {
+export const updateRewards = async (req, res) => {
         try {
-            const { _id, ...updateFields } = req.body;
-
-            const updatedUser = await User.findByIdAndUpdate(
+            const { _id, imgPath, ...updateFields } = req.body;
+            const coverFile = req.file ? req.file.filename : imgPath;
+            const updateReward = await Reward.findByIdAndUpdate(
                 _id,
-                { $set: updateFields },
+                { $set: {...updateFields, imgPath: coverFile} },
                 { new: true }
             );
 
-            res.status(200).json({ success: true, user: updatedUser, message: "Updated user successfully" });
+            res.status(200).json({ success: true, reward: updateReward, message: "Updated reward successfully" });
         } catch (error) {
             res.status(500).json({ success: false, message: error.message });
         }
+}
+
+export const deleteRewards = async (req, res) => {
+    try {
+        const { id } = req.params;
+        console.log(req.params.id);
+        // const {coverImg} = await BookInfo.findById(id).select('coverImg -_id');
+        const deletedReward = await Reward.findOneAndDelete({ _id: id});
+
+        const uploadDir = getCoverImgUploadFolder();
+
+        if(deletedReward) {
+            const coverImgExist = await fileExists(uploadDir, deletedReward.imgPath);
+            if(coverImgExist) await fsp.unlink(path.join(uploadDir, deletedReward.imgPath));
+
+            return res.status(200).json({ success: true, message: 'Reward deleted' });
+        }else {
+            return res.status(404).json({ success: false, message: 'Reward not found' });
+        }
+    }catch (err) {
+        return  res.status(500).json({ error: err.message });
+    }
 }
