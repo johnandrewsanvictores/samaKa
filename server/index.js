@@ -12,6 +12,7 @@ import rewardRoutes from './routes/rewards.js';
 import cookieParser from "cookie-parser";
 import { URL } from 'url';
 import connectDbB from "./config/db.js";
+import path from "path";
 
 dotenv.config();
 const app = express();
@@ -22,6 +23,9 @@ app.use((req, res, next) => {
     res.header("Access-Control-Allow-Credentials", true);
     next();
 });
+
+app.use(express.urlencoded({ extended: true }));
+app.use('/rewards', express.static(path.join(process.cwd(), 'uploads', 'rewards')));
 app.use(express.json());
 
 app.use(cors({
