@@ -1,6 +1,6 @@
 import express from "express";
 import {
-    createUser,
+    createUser, getSpecificUser,
     getUser, getUserProfile,
     google_authenticate,
     google_callback,
@@ -20,6 +20,7 @@ router.post("/logout", logout);
 router.post("/signin", signIn);
 router.post("/signup", validateUserInfo, createUser);
 router.get('/user/profile', auth, getUserProfile);
+router.get('/specificUser', auth, getSpecificUser);
 
 
 export default router;

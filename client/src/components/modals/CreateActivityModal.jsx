@@ -3,7 +3,7 @@ import logo from "../../assets/SamaKa.png";
 import api from "../../../axious.js";
 import {showError, showSuccess} from "../../utils/alertHelper.js";
 
-const CreateActivityModal = ({ isOpen, onClose, onSave }) => {
+const CreateActivityModal = ({ isOpen, onClose, setEvents, events }) => {
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -62,12 +62,16 @@ const CreateActivityModal = ({ isOpen, onClose, onSave }) => {
       );
 
       const data = res.data;
+      console.log([...events, "hello"]);
+      setEvents(prev => prev = [...events, data])
+      console.log(events);
+
       showSuccess("Event created!");
       handleClear();
       onClose();
 
     } catch (error) {
-      showError(error.response.data.error);
+      showError(error);
     }
   };
 
