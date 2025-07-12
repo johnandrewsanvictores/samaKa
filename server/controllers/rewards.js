@@ -10,7 +10,7 @@ export const addRewards = async (req, res) => {
     try {
         const currentUser = req.user;
         console.log(currentUser)
-        const {imgPath, title, description, lp} = req.body;
+        const {imgPath, title, description, lp, category} = req.body;
         const coverFile = req.file.filename;
         if(currentUser.role !== "barangay"){
             const coverImgExist = await fileExists(getCoverImgUploadFolder('../uploads/rewards'), coverFile);
@@ -30,7 +30,7 @@ export const addRewards = async (req, res) => {
             return res.status(409).json({ error: "Reward already exists" });
         }
 
-        const reward = await Reward.create({barangayId: currentUser.barangayId, imgPath: coverFile, title, description, lp});
+        const reward = await Reward.create({barangayId: currentUser.barangayId, imgPath: coverFile, title, description, lp, category});
 
         res.status(201).json({
             reward,
