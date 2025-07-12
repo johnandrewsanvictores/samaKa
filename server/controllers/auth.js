@@ -92,7 +92,7 @@ export const google_callback = (req, res, next) => {
             });
 
 
-            res.redirect(`${process.env.FRONTEND_BASE_URL}/`);
+            res.redirect(`${process.env.FRONTEND_BASE_URL}/google-success`);
         });
     })(req, res, next);
 }

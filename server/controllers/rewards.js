@@ -5,12 +5,13 @@ import { promises as fsp } from 'fs';
 import {fileExists, getCoverImgUploadFolder} from "../utils/helper.js";
 import path from "path";
 import Events from "../models/eventModel.js";
+import RewardClaim from "../models/rewardClaimModel.js";
 
 export const addRewards = async (req, res) => {
     try {
         const currentUser = req.user;
         console.log(currentUser)
-        const {imgPath, title, description, lp} = req.body;
+        const {imgPath, title, description, lp, category} = req.body;
         const coverFile = req.file.filename;
         if(currentUser.role !== "barangay"){
             const coverImgExist = await fileExists(getCoverImgUploadFolder('../uploads/rewards'), coverFile);
@@ -30,7 +31,7 @@ export const addRewards = async (req, res) => {
             return res.status(409).json({ error: "Reward already exists" });
         }
 
-        const reward = await Reward.create({barangayId: currentUser.barangayId, imgPath: coverFile, title, description, lp});
+        const reward = await Reward.create({barangayId: currentUser.barangayId, imgPath: coverFile, title, description, lp, category});
 
         res.status(201).json({
             reward,
@@ -82,7 +83,8 @@ export const deleteRewards = async (req, res) => {
 
 export const getRewards = async (req, res) => {
     try {
-        const reward = await Reward.find({}); // exclude password
+        const filters = req.query;
+        const reward = await Reward.find(filters); // exclude password
         console.log(reward);
         res.json({rewards: reward});
     } catch (err) {
@@ -95,6 +97,49 @@ export const getSpecificBarangayRewards = async (req, res) => {
         const { barangayId } = req.params;
         const specificBarangayRewards = await Reward.find({barangayId: barangayId}); // exclude password
         res.json({specificBarangayRewards});
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+}
+
+export const rewardClaim = async (req, res) => {
+    try {
+        const currentUser = req.user;
+        const {rewardId, receiptImg} = req.body;
+
+        const coverFile = req.file.filename;
+        const reward = await RewardClaim.create({rewardId, receiptImg: coverFile, userId: currentUser._id});
+
+        res.status(201).json({
+            reward,
+            success: "true",
+            message: "Reward claimed successfully"
+        });
+    } catch(error) {
+        res.status(500).json({ error: error });
+    }
+}
+
+export const rewardClaimChangeStatus = async (req, res) => {
+    try {
+        const { _id, status } = req.body;
+        const updateReward = await RewardClaim.findByIdAndUpdate(
+            _id,
+            { $set: {status} },
+            { new: true }
+        );
+
+        res.status(200).json({ success: true, claimReward: updateReward, message: "Reward claimed successfully" });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+}
+
+export const getClaimRewards = async (req, res) => {
+    try {
+        const filters = req.query;
+        const rewardClaim = await RewardClaim.find(filters); // exclude password
+        res.json({rewardClaim});
     } catch (err) {
         res.status(500).json({ error: err });
     }

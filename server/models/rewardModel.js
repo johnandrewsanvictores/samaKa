@@ -3,6 +3,7 @@ import {Double, Int32, ObjectId, Timestamp} from "mongodb";
 
 const rewardSchema = new mongoose.Schema({
                 barangayId: {type: ObjectId, required: true},
+                category: {type: String, required: true},
                 imgPath: { type: String, required: false, default: "" },
                 title: { type: String, required: true, default: "" },
                 description:  { type: String, required: false, default: "" },

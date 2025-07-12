@@ -83,7 +83,8 @@ export const deleteEvents = async (req, res) => {
 
 export const getEvents = async (req, res) => {
     try {
-        const events = await Events.find({}); // exclude password
+        const filters = req.query;
+        const events = await Events.find(filters); // exclude password
         console.log(events);
         res.json({events: events});
     } catch (err) {
@@ -129,6 +130,10 @@ export const joinEvent = async (req, res) => {
 export const acceptAttendance = async (req, res) => {
     try {
         const { eventId, userId } = req.body;
+        const {lp} = await Events.findById(eventId, {"lp": 1});
+        console.log(lp);
+
+        await User.findByIdAndUpdate(userId, {$inc: {'lp' : lp}});
         const updateReward = await Join.findOneAndUpdate(
             {$and: [
                 {eventId}, {userId}

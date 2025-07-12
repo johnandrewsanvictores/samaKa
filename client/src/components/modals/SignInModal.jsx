@@ -71,10 +71,16 @@ const SignInModal = ({ isOpen, onClose, onSwitchToSignUp }) => {
     
       resetForm();
       onClose();
-      if (data.user.isFirstVisit) {
+      if (!data.user.barangayId && data.user.role === "public_user") {
         navigate("/decide-user-type");
       } else {
-        navigate("/dashboard");
+        if(data.user.role === "public_user") {
+          navigate("/dashboard");
+        }else if(data.user.role === "barangay"){
+          navigate("/barangay-dashboard")
+        }else if(data.user.role === "municipality"){
+          navigate("/municipality-dashboard");
+        }
       }
     } catch (error) {
       if (error.response && error.response.status === 400) {
