@@ -46,7 +46,7 @@ function App() {
         <Route path="/barangay-leaderboard" element={<BarangayLeaderboard />} />
         <Route path="/events" element={<Events />} />
         <Route path="/manage-barangays" element={<ManageBarangays />} />
-        <Route path="/municipality-dashboard" element={<MunicipalityDashboard />}
+        <Route path="/municipality-dashboard" element={<MunicipalityDashboard />} />
 
 
         {/* 
