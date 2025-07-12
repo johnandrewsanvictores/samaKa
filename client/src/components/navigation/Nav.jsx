@@ -197,7 +197,7 @@ const Nav = () => {
             )}
           </div>
 
-          {/* Mobile Menu Button */}
+    
           <div className="lg:hidden flex items-center">
             {user ? (
               <div className="flex items-center space-x-4">
@@ -233,7 +233,7 @@ const Nav = () => {
           </div>
         </div>
 
-        {/* Mobile Menu */}
+
         {isMobileMenuOpen && (
           <div className="lg:hidden bg-white border-t border-gray-200 shadow-lg absolute w-full left-0 z-40">
             <div className="px-4 py-3 border-b border-gray-100 bg-gray-50">
@@ -292,7 +292,7 @@ const Nav = () => {
           </div>
         )}
 
-        {/* Mobile Dropdown (shown when user clicks avatar) */}
+ 
         {isDropdownOpen && isMobile && (
           <div
             className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-50"
@@ -361,14 +361,13 @@ const Nav = () => {
         )}
       </nav>
 
-      {/* Sign In Modal */}
       <SignInModal
         isOpen={isSignInModalOpen}
         onClose={handleCloseModals}
         onSwitchToSignUp={handleSwitchToSignUp}
       />
 
-      {/* Sign Up Modal */}
+  
       <SignUpModal
         isOpen={isSignUpModalOpen}
         onClose={handleCloseModals}

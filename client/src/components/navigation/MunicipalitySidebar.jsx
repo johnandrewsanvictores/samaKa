@@ -6,7 +6,7 @@ import { useAuth } from "../../context/AuthContext.jsx";
 import api from "../../../axious.js";
 import { showConfirmation, showSuccess } from "../../utils/alertHelper.js";
 
-const Sidebar = ({ isOpen = true, onToggle }) => {
+const MunicipalitySidebar = ({ isOpen = true, onToggle }) => {
   const { setUser } = useAuth();
   const navigate = useNavigate();
   const [isProcessingLogout, setIsProcessingLogout] = useState(false);
@@ -39,14 +39,13 @@ const Sidebar = ({ isOpen = true, onToggle }) => {
         isOpen ? "translate-x-0" : "-translate-x-full"
       } lg:translate-x-0`}
     >
-      {/* Close button (mobile) */}
+      {/* Close button mobile */}
       <button
         className="lg:hidden absolute top-4 right-4 text-headingText"
         onClick={() => onToggle ? onToggle() : null}
       >
         <i className="fa-solid fa-xmark text-2xl"></i>
       </button>
-
       <div>
         <div className="flex items-center space-x-3 p-4">
           <img src={logo} alt="logo" className="h-10 w-10" />
@@ -55,25 +54,17 @@ const Sidebar = ({ isOpen = true, onToggle }) => {
           </span>
         </div>
         <nav className="mt-4 flex flex-col space-y-2 px-2">
-          <NavLink to="/barangay-dashboard" className={getSidebarLinkClass} end>
+          <NavLink to="/municipality-dashboard" className={getSidebarLinkClass} end>
             <i className="fa-solid fa-house text-xl"></i>
             <span className="text-lg">Dashboard</span>
           </NavLink>
-          <NavLink to="/manage-events" className={getSidebarLinkClass}>
+          <NavLink to="/manage-barangays" className={getSidebarLinkClass}>
+            <i className="fa-solid fa-users-gear text-xl"></i>
+            <span className="text-lg">Manage Barangays</span>
+          </NavLink>
+          <NavLink to="/events" className={getSidebarLinkClass}>
             <i className="fa-solid fa-calendar-days text-xl"></i>
-            <span className="text-lg">Manage Events</span>
-          </NavLink>
-          <NavLink to="/analytics" className={getSidebarLinkClass}>
-            <i className="fa-solid fa-chart-column text-xl"></i>
-            <span className="text-lg">Analytics</span>
-          </NavLink>
-          <NavLink to="/rewards" className={getSidebarLinkClass}>
-            <i className="fa-solid fa-gift text-xl"></i>
-            <span className="text-lg">Rewards</span>
-          </NavLink>
-          <NavLink to="/barangay-leaderboard" className={getSidebarLinkClass}>
-            <i className="fa-solid fa-ranking-star text-xl"></i>
-            <span className="text-lg">Leaderboard</span>
+            <span className="text-lg">Events</span>
           </NavLink>
           <NavLink to="/profile" className={getSidebarLinkClass}>
             <i className="fa-solid fa-user text-xl"></i>
@@ -82,7 +73,6 @@ const Sidebar = ({ isOpen = true, onToggle }) => {
         </nav>
       </div>
 
- 
       <div className="p-4 border-t border-gray-200">
         <button
           onClick={handleLogout}
@@ -97,4 +87,4 @@ const Sidebar = ({ isOpen = true, onToggle }) => {
   );
 };
 
-export default Sidebar; 
+export default MunicipalitySidebar; 

@@ -48,7 +48,6 @@ const SignInModal = ({ isOpen, onClose, onSwitchToSignUp }) => {
       ...prev,
       [name]: value,
     }));
-    // Clear error when user starts typing
     if (error) setError("");
   };
 
@@ -58,7 +57,7 @@ const SignInModal = ({ isOpen, onClose, onSwitchToSignUp }) => {
     setError("");
 
     try {
-      // Database API call to your authentication endpoint
+   
       const res = await api.post("/auth/signin", {
         username: formData.username,
         password: formData.password,
@@ -69,7 +68,7 @@ const SignInModal = ({ isOpen, onClose, onSwitchToSignUp }) => {
       setUser(data.user);
       console.log(data.user);
 
-      // Close modal and navigate based on user status
+    
       resetForm();
       onClose();
       if (data.user.isFirstVisit) {

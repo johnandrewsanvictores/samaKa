@@ -1,12 +1,21 @@
 import UserSidebar from "../components/navigation/UserSidebar.jsx";
+import { useState } from "react";
 
 const UserProfile = () => {
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
   return (
     <div className="flex">
-      <UserSidebar />
+      <UserSidebar isOpen={isSidebarOpen} onToggle={() => setSidebarOpen(!isSidebarOpen)} />
 
-      <main className="ml-60 w-full bg-bgColor min-h-screen p-6">
+      <main className="w-full bg-bgColor min-h-screen p-6 ml-0 lg:ml-60 transition-all duration-300">
         <div className="flex justify-between items-center mb-6">
+          {/* Toggle button for mobile */}
+          <button
+            className="lg:hidden text-headingText mr-2"
+            onClick={() => setSidebarOpen(!isSidebarOpen)}
+          >
+            <i className="fas fa-bars text-2xl"></i>
+          </button>
           <h1 className="text-headingText text-2xl font-bold font-nunito flex items-center space-x-2">
             <i className="fa-solid fa-user text-primary"></i>
             <span>Profile</span>

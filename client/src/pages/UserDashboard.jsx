@@ -1,4 +1,6 @@
+import { useState } from "react";
 import UserSidebar from "../components/navigation/UserSidebar.jsx";
+import { useNavigate } from "react-router-dom";
 
 const UserDashboard = () => {
   const overviewData = [
@@ -8,23 +10,33 @@ const UserDashboard = () => {
     { label: "Rewards Claimed", value: 23 },
   ];
 
+  const navigate = useNavigate();
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+
   return (
     <div className="flex">
-      <UserSidebar />
+      <UserSidebar isOpen={isSidebarOpen} onToggle={() => setSidebarOpen(!isSidebarOpen)} />
 
-      <main className="ml-60 w-full bg-bgColor min-h-screen p-6">
+      <main className="w-full bg-bgColor min-h-screen p-6 ml-0 lg:ml-60 transition-all duration-300">
        
         <div className="flex justify-between items-center mb-6">
+
+          <button
+            className="lg:hidden text-headingText mr-2"
+            onClick={() => setSidebarOpen(!isSidebarOpen)}
+          >
+            <i className="fas fa-bars text-2xl"></i>
+          </button>
           <h1 className="text-headingText text-2xl font-bold font-nunito flex items-center space-x-2">
             <i className="fa-solid fa-gauge-high text-primary"></i>
             <span>Dashboard</span>
           </h1>
-          <button className="bg-primary text-white px-4 py-2 rounded-lg font-semibold shadow hover:bg-blue-600 transition-all flex items-center space-x-2">
+          <button className="bg-primary text-white px-4 py-2 rounded-lg font-semibold shadow hover:bg-blue-600 transition-all flex items-center space-x-2" onClick={() => navigate('/events')}>
             <span>Join Activities</span>
           </button>
         </div>
 
-    
+  
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
      
           <div className="bg-white rounded-lg p-6 shadow-md flex flex-col justify-between">
@@ -35,7 +47,7 @@ const UserDashboard = () => {
             <p className="text-subHeadingText text-sm mb-4">
               Ready to accumulate more lingkod points?
             </p>
-            <button className="bg-primary text-white w-full py-2 rounded-lg font-semibold flex items-center justify-center space-x-2">
+            <button className="bg-primary text-white w-full py-2 rounded-lg font-semibold flex items-center justify-center space-x-2" onClick={() => navigate('/events')}>
               <span>Join Activities</span>
             </button>
           </div>
