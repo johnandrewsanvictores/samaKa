@@ -6,6 +6,7 @@ import cors from 'cors';
 import authRoutes from './routes/auth.js';
 import barangayRoutes from './routes/barangay.js';
 import rewardRoutes from './routes/rewards.js';
+import eventRoutes from './routes/events.js';
 
 
 //import emailRoutes from './routes/email.js';
@@ -26,6 +27,7 @@ app.use((req, res, next) => {
 
 app.use(express.urlencoded({ extended: true }));
 app.use('/rewards', express.static(path.join(process.cwd(), 'uploads', 'rewards')));
+app.use('/eventCover', express.static(path.join(process.cwd(), 'uploads', 'eventCover')));
 app.use(express.json());
 
 app.use(cors({
@@ -73,6 +75,8 @@ app.use(passport.session());
 app.use("/auth", authRoutes);
 app.use("/barangay", barangayRoutes);
 app.use("/reward", rewardRoutes);
+app.use("/event", eventRoutes);
+
 //app.use("/mail", emailRoutes)
 
 app.listen(3000, () => {

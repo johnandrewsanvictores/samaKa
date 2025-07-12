@@ -4,10 +4,10 @@ import fs from 'fs';
 import {fileURLToPath} from "url";
 
 
-export const getCoverImgUploadFolder = () => {
+export const getCoverImgUploadFolder = (folder_path) => {
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
-    const uploadDir = path.resolve(__dirname, '../uploads/rewards');
+    const uploadDir = path.resolve(__dirname, folder_path);
 
     if(!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, {recursive: true});
 

@@ -3,7 +3,7 @@ import {getCoverImgUploadFolder} from "../utils/helper.js";
 import path from "path";
 
 
-const uploadDir = getCoverImgUploadFolder("../uploads/rewards");
+const uploadDir = getCoverImgUploadFolder("../uploads/eventCover");
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, uploadDir);
@@ -20,4 +20,4 @@ const fileFilter = (req, file, cb) => {
     cb(null, isValid);
 }
 
-export const uploadRewardCover = multer({storage, fileFilter, limits: { fileSize: 5 * 1024 * 1024 }});
+export const uploadEventCover = multer({storage, fileFilter, limits: { fileSize: 5 * 1024 * 1024 }});

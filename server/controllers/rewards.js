@@ -4,6 +4,7 @@ import User from "../models/userModel.js";
 import { promises as fsp } from 'fs';
 import {fileExists, getCoverImgUploadFolder} from "../utils/helper.js";
 import path from "path";
+import Events from "../models/eventModel.js";
 
 export const addRewards = async (req, res) => {
     try {
@@ -12,8 +13,8 @@ export const addRewards = async (req, res) => {
         const {imgPath, title, description, lp} = req.body;
         const coverFile = req.file.filename;
         if(currentUser.role !== "barangay"){
-            const coverImgExist = await fileExists(getCoverImgUploadFolder(), coverFile);
-            if(coverImgExist) await fsp.unlink(path.join(getCoverImgUploadFolder(), coverFile));
+            const coverImgExist = await fileExists(getCoverImgUploadFolder('../uploads/rewards'), coverFile);
+            if(coverImgExist) await fsp.unlink(path.join(getCoverImgUploadFolder('../uploads/rewards'), coverFile));
             return res.status(401).json({ error: 'Unauthorized' });
         }
 
@@ -24,8 +25,8 @@ export const addRewards = async (req, res) => {
         })
 
         if (rewards) {
-            const coverImgExist = await fileExists(getCoverImgUploadFolder(), coverFile);
-            if(coverImgExist) await fsp.unlink(path.join(getCoverImgUploadFolder(), coverFile));
+            const coverImgExist = await fileExists(getCoverImgUploadFolder('../uploads/rewards'), coverFile);
+            if(coverImgExist) await fsp.unlink(path.join(getCoverImgUploadFolder('../uploads/rewards'), coverFile));
             return res.status(409).json({ error: "Reward already exists" });
         }
 
@@ -64,7 +65,7 @@ export const deleteRewards = async (req, res) => {
         // const {coverImg} = await BookInfo.findById(id).select('coverImg -_id');
         const deletedReward = await Reward.findOneAndDelete({ _id: id});
 
-        const uploadDir = getCoverImgUploadFolder();
+        const uploadDir = getCoverImgUploadFolder('../uploads/rewards');
 
         if(deletedReward) {
             const coverImgExist = await fileExists(uploadDir, deletedReward.imgPath);
@@ -76,5 +77,15 @@ export const deleteRewards = async (req, res) => {
         }
     }catch (err) {
         return  res.status(500).json({ error: err.message });
+    }
+}
+
+export const getRewards = async (req, res) => {
+    try {
+        const reward = await Reward.find({}); // exclude password
+        console.log(reward);
+        res.json({rewards: reward});
+    } catch (err) {
+        res.status(500).json({ error: err });
     }
 }

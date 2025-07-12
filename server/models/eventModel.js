@@ -3,17 +3,19 @@ import {Int32, ObjectId, Timestamp} from "mongodb";
 
 const eventSchema = new mongoose.Schema({
     title: { type: String, required: true },
+    eventImg: { type: String, required: false },
     description: { type: String, required: true },
     barangayId: {type: ObjectId, required: true},
-    startDate: { type: Timestamp, required: true },
-    endDate: { type: Timestamp, required: true },
+    startDate: { type: Date, required: true },
+    endDate: { type: Date, required: true },
     lp: { type: String, required: true },
     type: { type: String, required: true },
+    dayInterval: {type : Number, required: false, default: null},
     status: { type: String, required: true, default: "upcoming" },
     joined: {type: [{
             userId: { type: ObjectId, required: true },
             isPresent: { type: Boolean, default: false },
-            joinedAt: { type: Timestamp, required: true },
+            joinedAt: { type: Date, required: true },
         }], default: []}
 
 }, { timestamps: true });
