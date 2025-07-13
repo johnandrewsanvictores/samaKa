@@ -1,16 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import MunicipalitySidebar from "../components/navigation/MunicipalitySidebar.jsx";
+import { fetchBarangays } from "../services/barangayService.js";
 
 const MunicipalityDashboard = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [barangays, setBarangays] = useState([]);
 
   const navigate = useNavigate();
 
-  const barangays = [
-    { name: "Barangay 1", events: 5, residents: 450 },
-    { name: "Barangay 2", events: 2, residents: 310 },
-  ];
+  useEffect(() => {
+    const loadBarangays = async () => {
+      try {
+        const list = await fetchBarangays();
+        setBarangays(list);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    loadBarangays();
+  }, []);
 
   return (
     <div className="flex">
@@ -30,9 +39,9 @@ const MunicipalityDashboard = () => {
             <i className="fa-solid fa-city text-primary"></i>
             <span>Municipality Dashboard</span>
           </h1>
-          <button className="bg-primary text-white px-4 py-2 rounded-lg font-semibold shadow hover:bg-blue-600 transition-all flex items-center space-x-2" onClick={() => navigate("/manage-barangays")}>
+          <button className="bg-primary text-white px-4 py-2 rounded-lg font-semibold shadow hover:bg-blue-600 transition-all flex items-center space-x-2" onClick={() => navigate("/manage-barangays")}> 
             <i className="fa-solid fa-plus"></i>
-            <span>Create Account</span>
+            <span>Create Barangay</span>
           </button>
         </div>
 
@@ -47,16 +56,16 @@ const MunicipalityDashboard = () => {
               <div
                 key={idx}
                 className="cursor-pointer border border-gray-200 rounded-lg p-4 hover:shadow-lg transition-shadow bg-bgColor2"
-                onClick={() => console.log(`View details for ${bgy.name}`)}
+                onClick={() => console.log(`View details for ${bgy.barangayName || bgy.name}`)}
               >
-                <h3 className="text-lg font-bold text-headingText mb-2">{bgy.name}</h3>
+                <h3 className="text-lg font-bold text-headingText mb-2">{bgy.barangayName || bgy.name}</h3>
                 <p className="text-subHeadingText text-sm mb-1">
                   <i className="fa-solid fa-calendar-days text-primary mr-1"></i>
-                  Events: {bgy.events}
+                  Events: {bgy.events ? bgy.events.length || bgy.events : 0}
                 </p>
                 <p className="text-subHeadingText text-sm">
                   <i className="fa-solid fa-users text-primary mr-1"></i>
-                  Residents: {bgy.residents}
+                  Residents: {bgy.residents ?? 0}
                 </p>
               </div>
             ))}

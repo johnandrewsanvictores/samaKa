@@ -1,57 +1,101 @@
 import Sidebar from "../components/navigation/Sidebar.jsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RewardModal from "../components/modals/RewardModal.jsx";
-
-const initialRewards = [
-  {
-    id: 1,
-    title: "Eco Tote Bag",
-    points: 100,
-    image: "https://source.unsplash.com/400x300/?tote",
-  },
-  {
-    id: 2,
-    title: "Reusable Bottle",
-    points: 150,
-    image: "https://source.unsplash.com/400x300/?water-bottle",
-  },
-];
+import {
+  buildRewardImgUrl,
+  fetchRewards,
+  createReward,
+  updateReward,
+  deleteReward,
+} from "../services/rewardService.js";
 
 const Rewards = () => {
-  const [rewards, setRewards] = useState(initialRewards);
+  const [rewards, setRewards] = useState([]);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [editReward, setEditReward] = useState(null);
 
-  const handleAddReward = (data) => {
-    const newReward = {
-      id: Date.now(),
+  
+  useEffect(() => {
+    const loadRewards = async () => {
+      try {
+        const data = await fetchRewards();
+        
+        const formatted = data.map((rw) => ({
+          id: rw._id,
+          _id: rw._id, 
+          title: rw.title,
+          points: rw.lp,
+          imgPath: rw.imgPath,
+          image: buildRewardImgUrl(rw.imgPath),
+        }));
+        setRewards(formatted);
+      } catch (err) {
+        console.error("Failed to fetch rewards", err);
+      }
+    };
+    loadRewards();
+  }, []);
+
+  const handleAddReward = async (data) => {
+    try {
+      const reward = await createReward({
       title: data.title,
       points: data.points,
-      image: data.imagePreview || URL.createObjectURL(data.image),
+        image: data.image,
+      });
+
+      const newReward = {
+        id: reward._id,
+        _id: reward._id,
+        title: reward.title,
+        points: reward.lp,
+        imgPath: reward.imgPath,
+        image: buildRewardImgUrl(reward.imgPath),
     };
     setRewards((prev) => [...prev, newReward]);
+    } catch (err) {
+      console.error("Failed to create reward", err);
+    }
   };
 
-  const handleEditReward = (data) => {
+  const handleEditReward = async (data) => {
+    try {
+      const updated = await updateReward({
+        _id: editReward._id,
+        title: data.title,
+        points: data.points,
+        image: data.image, 
+        imgPath: editReward.imgPath,
+      });
+
     setRewards((prev) =>
       prev.map((rw) =>
         rw.id === editReward.id
           ? {
               ...rw,
-              title: data.title,
-              points: data.points,
-              image: data.imagePreview || rw.image,
+                title: updated.title,
+                points: updated.lp,
+                imgPath: updated.imgPath,
+                image: buildRewardImgUrl(updated.imgPath),
             }
           : rw
       )
     );
     setEditReward(null);
+    } catch (err) {
+      console.error("Failed to update reward", err);
+    }
   };
 
-  const handleRemoveReward = (id) => {
-    if (confirm("Remove this reward?")) {
+  const handleRemoveReward = async (id) => {
+    if (!confirm("Remove this reward?")) return;
+
+    try {
+      await deleteReward(id);
       setRewards((prev) => prev.filter((rw) => rw.id !== id));
+    } catch (err) {
+      console.error("Failed to delete reward", err);
     }
   };
 

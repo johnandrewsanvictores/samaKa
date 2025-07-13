@@ -48,9 +48,7 @@ const UserSidebar = ({ isOpen = true, onToggle }) => {
       <div>
         <div className="flex items-center space-x-3 p-4">
           <img src={logo} alt="logo" className="h-10 w-10" />
-          <span className="font-nunito font-bold text-2xl text-headingText">
-            Sama<span className="text-primary">Ka</span>
-          </span>
+          <p className="text-2xl font-bold text-headingText">Bayani<span className="text-primary">Mo</span></p>
         </div>
         <nav className="mt-4 flex flex-col space-y-2 px-2">
           <NavLink to="/dashboard" className={getSidebarLinkClass} end>

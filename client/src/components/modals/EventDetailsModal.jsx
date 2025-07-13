@@ -1,6 +1,11 @@
 import logo from "../../assets/SamaKa.png";
 import currency from "../../assets/lp.png";
-import api from "../../../axious.js";
+import {
+  buildEventImgUrl,
+  acceptAttendance,
+  rejectAttendance,
+  joinEvent,
+} from "../../services/eventService.js";
 import {showSuccess} from "../../utils/alertHelper.js";
 import moment from "moment/moment.js";
 import {useState} from "react";
@@ -28,15 +33,12 @@ const EventDetailsModal = ({
 
   const handleAttendance = async (userId, eventId) => {
     try {
-      await api.post(`/event/accept-join`, {
-        userId, eventId
-      });
-      showSuccess("Successfully joined the event!");
-
+      await acceptAttendance({ userId, eventId });
+      showSuccess("Attendance recorded!");
     } catch (err) {
-      console.error("Join failed", err);
+      console.error("Attendance update failed", err);
     }
-  }
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 overflow-auto p-4">
@@ -50,7 +52,7 @@ const EventDetailsModal = ({
 
         {/* Image */}
         {eventImg && (
-          <img src={import.meta.env.VITE_API_URL +"/eventCover/"+ eventImg} alt={title} className="w-full h-48 object-cover rounded-t-2xl" />
+          <img src={buildEventImgUrl(eventImg)} alt={title} className="w-full h-48 object-cover rounded-t-2xl" />
         )}
 
         <div className="p-6 space-y-4">

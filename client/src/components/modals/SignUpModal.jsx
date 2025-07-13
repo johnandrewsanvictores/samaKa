@@ -21,7 +21,7 @@ const SignUpModal = ({ isOpen, onClose, onSwitchToSignIn }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { setUser } = useAuth();
 
-  // Reset form when modal closes
+  
   const resetForm = () => {
     setFormData({
       firstName: "",
@@ -37,7 +37,7 @@ const SignUpModal = ({ isOpen, onClose, onSwitchToSignIn }) => {
     setShowConfirmPassword(false);
   };
 
-  // Clear form data when modal closes
+  
   useEffect(() => {
     if (!isOpen) {
       resetForm();

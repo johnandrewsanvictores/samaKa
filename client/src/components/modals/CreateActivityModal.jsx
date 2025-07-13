@@ -1,6 +1,6 @@
 import { useState } from "react";
 import logo from "../../assets/SamaKa.png";
-import api from "../../../axious.js";
+import { createEvent } from "../../services/eventService.js";
 import {showError, showSuccess} from "../../utils/alertHelper.js";
 
 const CreateActivityModal = ({ isOpen, onClose, setEvents, events }) => {
@@ -54,24 +54,24 @@ const CreateActivityModal = ({ isOpen, onClose, setEvents, events }) => {
     e.preventDefault();
     if (isDisabled) return;
     try {
-      console.log(form);
-      const res = await api.post(
-          "/event/create",
-          (form),
-          { withCredentials: true , headers: {'Content-Type': 'multipart/form-data' }}
-      );
+      const event = await createEvent({
+        title: form.title,
+        description: form.description,
+        startDate: form.startDate,
+        endDate: form.endDate,
+        type: form.type,
+        lp: form.lp,
+        eventImg: form.eventImg,
+      });
 
-      const data = res.data;
-      console.log([...events, "hello"]);
-      setEvents(prev => prev = [...events, data])
-      console.log(events);
+      setEvents((prev) => [...prev, event]);
 
       showSuccess("Event created!");
       handleClear();
       onClose();
 
     } catch (error) {
-      showError(error);
+      showError(error.response?.data?.error || error.message);
     }
   };
 
