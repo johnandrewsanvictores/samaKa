@@ -35,8 +35,9 @@ export const createBarangay = async (req, res) => {
 }
 
 export const getBarangays = async (req, res) => {
+    const filters = req.query;
     try {
-        const barangays = await Barangay.find({}); // exclude password
+        const barangays = await Barangay.find(filters); // exclude password
 
         res.json({barangays});
     } catch (err) {

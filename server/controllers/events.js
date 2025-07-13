@@ -83,7 +83,8 @@ export const deleteEvents = async (req, res) => {
 
 export const getEvents = async (req, res) => {
     try {
-        const events = await Events.find({}); // exclude password
+        const filters = req.query;
+        const events = await Events.find(filters); // exclude password
         console.log(events);
         res.json({events: events});
     } catch (err) {
@@ -106,6 +107,8 @@ export const joinEvent = async (req, res) => {
         const {eventId} = req.body;
         const currentUser = req.user;
 
+        const userInfo = await User.findById(currentUser._id);
+
         const isJoin = await Join.findOne({$and: [
                 {eventId}, {userId: currentUser._id}
             ]})
@@ -114,7 +117,7 @@ export const joinEvent = async (req, res) => {
             return res.status(409).json({ error: "User already joined" });
         }
 
-        const joinedInfo = await Join.create({userId:currentUser._id, eventId, joinedAt: Date.now()})
+        const joinedInfo = await Join.create({userId:currentUser._id, fullName: userInfo.firstName + " " + userInfo.lastName ,  eventId, joinedAt: Date.now()})
 
         res.status(201).json({
             joinedInfo,
@@ -129,6 +132,10 @@ export const joinEvent = async (req, res) => {
 export const acceptAttendance = async (req, res) => {
     try {
         const { eventId, userId } = req.body;
+        const {lp} = await Events.findById(eventId, {"lp": 1});
+        console.log(lp);
+
+        await User.findByIdAndUpdate(userId, {$inc: {'lp' : lp}});
         const updateReward = await Join.findOneAndUpdate(
             {$and: [
                 {eventId}, {userId}

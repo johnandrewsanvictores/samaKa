@@ -45,12 +45,17 @@ function App() {
         <Route path="/barangay-leaderboard" element={<BarangayLeaderboard />} />
         <Route path="/events" element={<Events />} />
         <Route path="/manage-barangays" element={<ManageBarangays />} />
+<<<<<<< HEAD
         <Route
           path="/municipality-dashboard"
           element={<MunicipalityDashboard />}
         />
         <Route path="/about" element={<About />} />
         <Route path="/reward" element={<RewardNav />} />
+=======
+        <Route path="/municipality-dashboard" element={<MunicipalityDashboard />} />
+
+>>>>>>> f76322d7076b82fcd98ee7cdc033ac6be7de72f8
 
         {/* 
         <Route

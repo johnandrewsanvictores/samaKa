@@ -4,6 +4,7 @@ import EventDetailsModal from "../components/modals/EventDetailsModal.jsx";
 import api from "../../axious.js";
 import currency from "../assets/lp.png";
 import { showSuccess } from "../utils/alertHelper.js";
+import {useAuth} from "../context/AuthContext.jsx";
 
 const FALLBACK_EVENTS = [
   {
@@ -48,11 +49,18 @@ const Events = () => {
   const [activeTab, setActiveTab] = useState("ongoing");
   const [events, setEvents] = useState([]);
   const [detailsEvent, setDetailsEvent] = useState(null);
+  const {user} = useAuth();
 
   useEffect(() => {
     const fetchEvents = async () => {
+        console.log("Hi")
       try {
+<<<<<<< HEAD
         const res = await api.get("/events/user-barangay");
+=======
+        const res = await api.get("/event");
+        console.log(res);
+>>>>>>> f76322d7076b82fcd98ee7cdc033ac6be7de72f8
         setEvents(res.data.events || []);
       } catch (err) {
         console.error("Failed to fetch events", err);
@@ -65,7 +73,9 @@ const Events = () => {
 
   const handleJoin = async (evt) => {
     try {
-      await api.post(`/events/${evt.id}/join`);
+      await api.post(`/event/join`, {
+        eventId: evt._id,
+      });
       showSuccess("Successfully joined the event!");
     } catch (err) {
       console.error("Join failed", err);

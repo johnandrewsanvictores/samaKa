@@ -1,8 +1,10 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import Sidebar from "../components/navigation/Sidebar.jsx";
 import CreateActivityModal from "../components/modals/CreateActivityModal.jsx";
 import EventDetailsModal from "../components/modals/EventDetailsModal.jsx";
 import currency from "../assets/lp.png";
+import api from "../../axious.js";
+import moment from "moment";
 
 const sampleEvents = [
   {
@@ -34,23 +36,54 @@ const sampleEvents = [
   },
 ];
 
+
+
 const TABS = [
   { key: "past", label: "Past Events" },
   { key: "ongoing", label: "Ongoing Events" },
   { key: "upcoming", label: "Upcoming Events" },
 ];
 
+
 const ManageEvents = () => {
   const [activeTab, setActiveTab] = useState("past");
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [detailsEvent, setDetailsEvent] = useState(null);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [attendees , setAttendees] = useState([]);
 
   const attendeesMock = [
     { name: "John Andrew San Victorres", present: true },
     { name: "John Andrew San Victorres", present: false },
     { name: "John Andrew San Victorres", present: true },
   ];
+
+  const [events, setEvents] = useState([]);
+
+  const fetchAttendees = async (evt) => {
+    try {
+      console.log(evt._id);
+      const res = await api.get("/event/participants/"+evt._id);
+        console.log(res.data.participants);
+      setAttendees(res.data.participants);
+    }catch (e) {
+      console.error(e);
+    }
+  }
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      console.log("Hi")
+      try {
+        const res = await api.get("/event");
+        console.log(res.data.events);
+        setEvents(res.data.events || []);
+      } catch (err) {
+        console.error("Failed to fetch events", err);
+      }
+    };
+    fetchEvents();
+  }, []);
 
   return (
     <div className="flex">
@@ -77,7 +110,6 @@ const ManageEvents = () => {
           </button>
         </div>
 
-   
         <div className="mb-6 border-b border-gray-200">
           <nav className="flex space-x-4">
             {TABS.map((tab) => (
@@ -98,15 +130,15 @@ const ManageEvents = () => {
 
    
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {sampleEvents
+          {events
             .filter((evt) => evt.status === activeTab)
             .map((evt) => (
               <div
-                key={evt.id}
+                key={evt._id}
                 className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow duration-200"
               >
                 <img
-                  src={evt.image}
+                  src={import.meta.env.VITE_API_URL + "/eventCover/"+evt.eventImg}
                   alt={evt.title}
                   className="w-full h-32 object-cover"
                 />
@@ -116,21 +148,21 @@ const ManageEvents = () => {
                   </h3>
                   <p className="text-xs text-subHeadingText mb-2 flex items-center gap-1">
                     <i className="fa-regular fa-calendar"></i>
-                    <span>{evt.date}</span>
+                    <span>{evt.startDate === evt.endDate ? moment(evt.startDate).format("MMM Do YY") : moment(evt.startDate).format("MMM Do YY") + " - " + moment(evt.endDate).format("MMM Do YY")}</span>
                   </p>
                   <p className="text-xs text-subHeadingText mb-2 flex items-center gap-1">
                     <img src={currency} alt="LP" className="w-4 h-4" />
-                    <span>{evt.points}</span>
-                  </p>
-                  <p className="text-xs text-subHeadingText mb-2 flex items-center gap-1">
-                    <i className="fa-solid fa-users"></i>
-                    <span>{evt.participants}</span>
+                    <span>{evt.lp}</span>
                   </p>
                   <p className="text-xs text-subHeadingText line-clamp-3 mb-4">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                    do eiusmod tempor incididunt ut labore.
+                    {evt.description}
                   </p>
-                  <button className="bg-primary/20 text-primary text-xs px-3 py-1 rounded-md font-semibold" onClick={() => setDetailsEvent(evt)}>
+                  <button className="bg-primary/20 text-primary text-xs px-3 py-1 rounded-md font-semibold" onClick={
+                    async () => {
+                      await setDetailsEvent(evt);
+                      await fetchAttendees(evt)
+                    }
+                  }>
                     View Details
                   </button>
                 </div>
@@ -139,10 +171,10 @@ const ManageEvents = () => {
         </div>
       </main>
       {isCreateOpen && (
-        <CreateActivityModal isOpen={isCreateOpen} onClose={() => setIsCreateOpen(false)} onSave={(data) => console.log("Save", data)} />
+        <CreateActivityModal isOpen={isCreateOpen} onClose={() => setIsCreateOpen(false)} setEvents={setEvents} events={events} />
       )}
       {detailsEvent && (
-        <EventDetailsModal isOpen={!!detailsEvent} onClose={() => setDetailsEvent(null)} event={detailsEvent} attendees={attendeesMock} />
+        <EventDetailsModal isOpen={!!detailsEvent} onClose={() => setDetailsEvent(null)} event={detailsEvent} attendees={attendees} />
       )}
     </div>
   );

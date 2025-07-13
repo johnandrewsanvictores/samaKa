@@ -4,6 +4,7 @@ import {ObjectId, Timestamp} from "mongodb";
 const joinSchema = new mongoose.Schema({
     userId: {type: ObjectId, required: true},
     eventId: {type: ObjectId, required: true},
+    fullName: {type: String, required: true},
     isPresent: { type: Boolean, default: null },
     joinedAt: { type: Date, required: true },
 }, { timestamps: true });

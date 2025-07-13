@@ -6,6 +6,7 @@ import {hashPassword} from "../utils/hash.js";
 import {body, validationResult} from "express-validator";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import Barangay from "../models/barangayModel.js";
 
 dotenv.config();
 
@@ -92,7 +93,7 @@ export const google_callback = (req, res, next) => {
             });
 
 
-            res.redirect(`${process.env.FRONTEND_BASE_URL}/`);
+            res.redirect(`${process.env.FRONTEND_BASE_URL}/google-success`);
         });
     })(req, res, next);
 }
@@ -254,7 +255,15 @@ export const getUserProfile = async (req, res) => {
     }
 }
 
-
+export const getSpecificUser = async (req, res) => {
+    try {
+        const filters = req.query;
+        const users = await User.find(filters); // exclude password
+        res.json(users[0]);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+}
 
 //VALIDATE USER INFO
 export const validateUserInfo = [

@@ -10,7 +10,9 @@ const userSchema = new mongoose.Schema({
     googleId: { type: String, required: false },
     rememberToken: { type: String, required: false },
     role:  {type: String, default: "public_user"},
-    barangayId: {type: ObjectId, required: false},
+    barangayId: {type: ObjectId, required: false, default: null},
+    lp: { type: Number, default: 0 },
+    xp:  { type: Number, default: 0 },
 }, { timestamps: true });
 
 const User = mongoose.model('User', userSchema);

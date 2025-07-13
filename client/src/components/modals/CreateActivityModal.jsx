@@ -1,15 +1,17 @@
 import { useState } from "react";
 import logo from "../../assets/SamaKa.png";
+import api from "../../../axious.js";
+import {showError, showSuccess} from "../../utils/alertHelper.js";
 
-const CreateActivityModal = ({ isOpen, onClose, onSave }) => {
+const CreateActivityModal = ({ isOpen, onClose, setEvents, events }) => {
   const [form, setForm] = useState({
     title: "",
     description: "",
     startDate: "",
     endDate: "",
-    activityType: "",
-    points: "",
-    image: "",
+    type: "",
+    lp: "",
+    eventImg: "",
   });
   const [imagePreview, setImagePreview] = useState("");
 
@@ -20,14 +22,14 @@ const CreateActivityModal = ({ isOpen, onClose, onSave }) => {
     if (type === "file") {
       const file = files[0];
       if (file) {
-        setForm((prev) => ({ ...prev, image: file }));
+        setForm((prev) => ({ ...prev, eventImg: file }));
         const reader = new FileReader();
         reader.onloadend = () => {
           setImagePreview(reader.result);
         };
         reader.readAsDataURL(file);
       } else {
-        setForm((prev) => ({ ...prev, image: "" }));
+        setForm((prev) => ({ ...prev, eventImg: "" }));
         setImagePreview("");
       }
     } else {
@@ -41,19 +43,36 @@ const CreateActivityModal = ({ isOpen, onClose, onSave }) => {
       description: "",
       startDate: "",
       endDate: "",
-      activityType: "",
-      points: "",
-      image: "",
+      type: "",
+      lp: "",
+      eventImg: "",
     });
     setImagePreview("");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (isDisabled) return;
-    onSave?.(form);
-    handleClear();
-    onClose();
+    try {
+      console.log(form);
+      const res = await api.post(
+          "/event/create",
+          (form),
+          { withCredentials: true , headers: {'Content-Type': 'multipart/form-data' }}
+      );
+
+      const data = res.data;
+      console.log([...events, "hello"]);
+      setEvents(prev => prev = [...events, data])
+      console.log(events);
+
+      showSuccess("Event created!");
+      handleClear();
+      onClose();
+
+    } catch (error) {
+      showError(error);
+    }
   };
 
   if (!isOpen) return null;
@@ -110,7 +129,7 @@ const CreateActivityModal = ({ isOpen, onClose, onSave }) => {
             </label>
             <input
               type="file"
-              name="image"
+              name="eventImg"
               accept="image/*"
               onChange={handleChange}
               className="w-full bg-bgColor2 rounded-md px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
@@ -162,8 +181,8 @@ const CreateActivityModal = ({ isOpen, onClose, onSave }) => {
                 Activity Type:
               </label>
               <select
-                name="activityType"
-                value={form.activityType}
+                name="type"
+                value={form.type}
                 onChange={handleChange}
                 className="w-full bg-bgColor2 rounded-md px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
                 required
@@ -179,9 +198,9 @@ const CreateActivityModal = ({ isOpen, onClose, onSave }) => {
                   </label>
                   <input
                     type="number"
-                    name="recurringDays"
+                    name="dayInterval"
                     min="1"
-                    value={form.recurringDays || ""}
+                    value={form.dayInterval || ""}
                     onChange={handleChange}
                     className="w-full bg-bgColor2 rounded-md px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
                     required
@@ -195,8 +214,8 @@ const CreateActivityModal = ({ isOpen, onClose, onSave }) => {
               </label>
               <input
                 type="number"
-                name="points"
-                value={form.points}
+                name="lp"
+                value={form.lp}
                 onChange={handleChange}
                 className="w-full bg-bgColor2 rounded-md px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
                 required
