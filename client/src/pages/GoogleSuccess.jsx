@@ -20,8 +20,10 @@ const GoogleSuccess = () => {
         setUser(data.user);
 
    
-        if (data.user.isFirstVisit) {
-          navigate("/decide-user-type");
+        if (data.user.role === "municipality") {
+          navigate("/municipality-dashboard");
+        } else if (data.user.role === "barangay") {
+          navigate("/barangay-dashboard");
         } else {
           navigate("/dashboard");
         }

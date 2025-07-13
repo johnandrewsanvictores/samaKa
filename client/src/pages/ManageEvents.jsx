@@ -3,7 +3,11 @@ import Sidebar from "../components/navigation/Sidebar.jsx";
 import CreateActivityModal from "../components/modals/CreateActivityModal.jsx";
 import EventDetailsModal from "../components/modals/EventDetailsModal.jsx";
 import currency from "../assets/lp.png";
-import api from "../../axious.js";
+import {
+  buildEventImgUrl,
+  fetchEvents,
+  fetchParticipants,
+} from "../services/eventService.js";
 import moment from "moment";
 
 const sampleEvents = [
@@ -62,27 +66,23 @@ const ManageEvents = () => {
 
   const fetchAttendees = async (evt) => {
     try {
-      console.log(evt._id);
-      const res = await api.get("/event/participants/"+evt._id);
-        console.log(res.data.participants);
-      setAttendees(res.data.participants);
-    }catch (e) {
+      const participants = await fetchParticipants(evt._id);
+      setAttendees(participants);
+    } catch (e) {
       console.error(e);
     }
-  }
+  };
 
   useEffect(() => {
-    const fetchEvents = async () => {
-      console.log("Hi")
+    const loadEvents = async () => {
       try {
-        const res = await api.get("/event");
-        console.log(res.data.events);
-        setEvents(res.data.events || []);
+        const data = await fetchEvents();
+        setEvents(data || []);
       } catch (err) {
         console.error("Failed to fetch events", err);
       }
     };
-    fetchEvents();
+    loadEvents();
   }, []);
 
   return (
@@ -138,7 +138,7 @@ const ManageEvents = () => {
                 className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow duration-200"
               >
                 <img
-                  src={import.meta.env.VITE_API_URL + "/eventCover/"+evt.eventImg}
+                  src={buildEventImgUrl(evt.eventImg)}
                   alt={evt.title}
                   className="w-full h-32 object-cover"
                 />

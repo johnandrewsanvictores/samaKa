@@ -11,11 +11,13 @@ export const addEvents = async (req, res) => {
         const currentUser = req.user;
         console.log(req.file);
         const {eventImg, title, description, startDate, endDate, lp, type, dayInterval, category} = req.body;
-        const coverFile = req.file.filename || null;
+        const coverFile = req.file ? req.file.filename : "";
 
         if(currentUser.role !== "barangay"){
-            const coverImgExist = await fileExists(getCoverImgUploadFolder("../uploads/eventCover"), coverFile);
-            if(coverImgExist) await fsp.unlink(path.join(getCoverImgUploadFolder("../uploads/eventCover"), coverFile));
+            if(coverFile){
+                const coverImgExist = await fileExists(getCoverImgUploadFolder("../uploads/eventCover"), coverFile);
+                if(coverImgExist) await fsp.unlink(path.join(getCoverImgUploadFolder("../uploads/eventCover"), coverFile));
+            }
             return res.status(401).json({ error: 'Unauthorized' });
         }
 
@@ -26,8 +28,10 @@ export const addEvents = async (req, res) => {
         })
 
         if (events) {
-            const coverImgExist = await fileExists(getCoverImgUploadFolder("../uploads/eventCover"), coverFile);
-            if(coverImgExist) await fsp.unlink(path.join(getCoverImgUploadFolder("../uploads/eventCover"), coverFile));
+            if(coverFile){
+                const coverImgExist = await fileExists(getCoverImgUploadFolder("../uploads/eventCover"), coverFile);
+                if(coverImgExist) await fsp.unlink(path.join(getCoverImgUploadFolder("../uploads/eventCover"), coverFile));
+            }
             return res.status(409).json({ error: "Event already exists" });
         }
 
@@ -63,7 +67,7 @@ export const deleteEvents = async (req, res) => {
      try {
          const { id } = req.params;
          console.log(req.params.id);
-         // const {coverImg} = await BookInfo.findById(id).select('coverImg -_id');
+         
          const deletedEvent = await Events.findOneAndDelete({ _id: id});
 
          const uploadDir = getCoverImgUploadFolder("../uploads/eventCover");
@@ -84,7 +88,7 @@ export const deleteEvents = async (req, res) => {
 export const getEvents = async (req, res) => {
     try {
         const filters = req.query;
-        const events = await Events.find(filters); // exclude password
+        const events = await Events.find(filters); 
         console.log(events);
         res.json({events: events});
     } catch (err) {
@@ -95,7 +99,7 @@ export const getEvents = async (req, res) => {
 export const getSpecificEvents = async (req, res) => {
     try {
         const { id } = req.params;
-        const event = await Events.find({_id: id}); // exclude password
+        const event = await Events.find({_id: id}); 
         res.json(event[0]);
     } catch (err) {
         res.status(500).json({ error: err });

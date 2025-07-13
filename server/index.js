@@ -20,10 +20,7 @@ const app = express();
 
 connectDbB();
 
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Credentials", true);
-    next();
-});
+
 
 app.use(express.urlencoded({ extended: true }));
 app.use('/rewards', express.static(path.join(process.cwd(), 'uploads', 'rewards')));
@@ -32,10 +29,25 @@ app.use('/receipt', express.static(path.join(process.cwd(), 'uploads', 'receipt'
 
 app.use(express.json());
 
-app.use(cors({
-    origin: process.env.FRONTEND_BASE_URL,
-    credentials: true
-}));
+
+const allowedOrigins = [process.env.FRONTEND_BASE_URL || 'http://localhost:5173'];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // allow requests with no origin like mobile apps or curl requests
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  })
+);
 
 app.use(cookieParser());
 

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import UserSidebar from "../components/navigation/UserSidebar.jsx";
 import EventDetailsModal from "../components/modals/EventDetailsModal.jsx";
 import api from "../../axious.js";
+import { joinEvent } from "../services/eventService.js";
 import currency from "../assets/lp.png";
 import { showSuccess } from "../utils/alertHelper.js";
 import {useAuth} from "../context/AuthContext.jsx";
@@ -60,7 +61,12 @@ const Events = () => {
       try {
         const res = await api.get("/event");
         console.log(res);
-        setEvents(res.data.events || []);
+        const fetched = (res.data.events || []).map((ev) => ({
+          ...ev,
+          joinedLabel: false,
+          participantsCount: ev.participantsCount || 0,
+        }));
+        setEvents(fetched);
       } catch (err) {
         console.error("Failed to fetch events", err);
         setEvents(FALLBACK_EVENTS); 
@@ -72,11 +78,32 @@ const Events = () => {
 
   const handleJoin = async (evt) => {
     try {
-      await api.post(`/event/join`, {
-        eventId: evt._id,
-      });
+      await joinEvent(evt._id);
+
+      // update list
+      setEvents((prev) =>
+        prev.map((e) =>
+          e._id === evt._id
+            ? {
+                ...e,
+                joinedLabel: true,
+                participantsCount: (e.participantsCount || 0) + 1,
+              }
+            : e
+        )
+      );
+
+      // update detail modal
+      setDetailsEvent((prev) =>
+        prev && prev._id === evt._id
+          ? {
+              ...prev,
+              attendees: [...(prev.attendees || []), { fullName: `${user.firstName} ${user.lastName}` }],
+            }
+          : prev
+      );
+
       showSuccess("Successfully joined the event!");
-    
     } catch (err) {
       console.error("Join failed", err);
     }
@@ -127,7 +154,7 @@ const Events = () => {
             .filter((evt) => evt.status === activeTab)
             .map((evt) => (
               <div
-                key={evt.id}
+                key={evt._id || evt.id}
                 className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow duration-200"
               >
                 {evt.image && (
@@ -143,7 +170,7 @@ const Events = () => {
                   </h3>
                   <p className="text-xs text-subHeadingText mb-2 flex items-center gap-1">
                     <i className="fa-regular fa-calendar"></i>
-                    <span>{evt.date}</span>
+                    <span>{evt.date || evt.startDate}</span>
                   </p>
                   <p className="text-xs text-subHeadingText mb-2 flex items-center gap-1">
                     <img src={currency} alt="LP" className="w-4 h-4" />
@@ -154,12 +181,15 @@ const Events = () => {
                       {evt.description}
                     </p>
                   )}
-                  <button
-                    className="bg-primary/20 text-primary text-xs px-3 py-1 rounded-md font-semibold"
-                    onClick={() => setDetailsEvent(evt)}
-                  >
-                    View Details
-                  </button>
+                  <div className="flex justify-between items-center">
+                    <button
+                      className="bg-primary/20 text-primary text-xs px-3 py-1 rounded-md font-semibold"
+                      onClick={() => setDetailsEvent(evt)}
+                    >
+                      View Details
+                    </button>
+                    <span className="text-[10px] text-subHeadingText">{evt.participantsCount} joined</span>
+                  </div>
                 </div>
               </div>
             ))}
